@@ -57,9 +57,13 @@ const BookScoreForm = ({ onBookScored }: BookScoreFormProps) => {
   
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     try {
-      // Use values with updated slider values
-      const bookData = {
-        ...values,
+      // Create a properly typed object with all required fields
+      const bookData: Omit<BookType, 'id' | 'scores' | 'totalScore' | 'date'> = {
+        title: values.title,
+        author: values.author,
+        publishYear: values.publishYear,
+        price: values.price,
+        awards: values.awards,
         relevance: relevanceValue[0],
         condition: conditionValue[0],
         demand: demandValue[0],
