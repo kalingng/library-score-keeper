@@ -1,11 +1,51 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import BookScoreForm from '@/components/BookScoreForm';
+import BookScoreResults from '@/components/BookScoreResults';
+import BookHistory from '@/components/BookHistory';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { BookType } from '@/types/book';
 
 const Index = () => {
+  const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("evaluate");
+
+  const handleBookScored = (book: BookType) => {
+    setScoredBooks(prev => [...prev, book]);
+    setActiveTab("results");
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <div className="container mx-auto py-8 px-4">
+        <header className="text-center mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-2">Book Acquisition Scoring Tool</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Evaluate books based on multiple criteria to make informed acquisition decisions for your library.
+          </p>
+        </header>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-4xl mx-auto">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="evaluate">Evaluate Book</TabsTrigger>
+            <TabsTrigger value="results">Results</TabsTrigger>
+            <TabsTrigger value="history">History</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="evaluate" className="p-6 bg-white rounded-lg shadow-md">
+            <BookScoreForm onBookScored={handleBookScored} />
+          </TabsContent>
+
+          <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md">
+            <BookScoreResults 
+              book={scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null}
+            />
+          </TabsContent>
+
+          <TabsContent value="history" className="p-6 bg-white rounded-lg shadow-md">
+            <BookHistory books={scoredBooks} />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
