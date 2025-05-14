@@ -100,7 +100,7 @@ const BookSearch = () => {
       </form>
       
       {searchResults.length > 0 && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {searchResults.map((book, index) => (
             <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
               <CardHeader className="bg-blue-50 pb-2">
@@ -108,36 +108,41 @@ const BookSearch = () => {
                 <p className="text-sm text-gray-600">by {book.author}</p>
               </CardHeader>
               <CardContent className="pt-4">
-                <div className="flex mb-4">
-                  {book.imageUrl ? (
-                    <img 
-                      src={book.imageUrl} 
-                      alt={`Cover of ${book.title}`} 
-                      className="w-20 h-auto object-contain mr-3"
-                    />
-                  ) : (
-                    <div className="w-20 h-28 bg-gray-100 flex items-center justify-center mr-3">
-                      <Book className="h-8 w-8 text-gray-400" />
+                <div className="flex flex-col space-y-4">
+                  {/* Book Cover Image */}
+                  <div className="flex justify-center">
+                    {book.imageUrl ? (
+                      <img 
+                        src={book.imageUrl} 
+                        alt={`Cover of ${book.title}`} 
+                        className="h-48 object-contain rounded-md shadow-sm"
+                      />
+                    ) : (
+                      <div className="h-48 w-32 bg-gray-100 flex items-center justify-center rounded-md">
+                        <Book className="h-12 w-12 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Book Details */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="text-sm font-medium text-gray-500">Genre:</div>
+                    <div className="text-sm">{book.category}</div>
+                    
+                    <div className="text-sm font-medium text-gray-500">Price:</div>
+                    <div className="text-sm">${book.price.toFixed(2)}</div>
+                    
+                    <div className="text-sm font-medium text-gray-500">Published:</div>
+                    <div className="text-sm">{book.publishYear}</div>
+                    
+                    <div className="text-sm font-medium text-gray-500">Rating from Amazon:</div>
+                    <div className="text-amber-500 text-sm font-medium">
+                      {getRatingStars(book.averageRating)} ({book.averageRating})
                     </div>
-                  )}
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-500">Category:</span>
-                      <span className="text-sm">{book.category}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-500">Price:</span>
-                      <span className="text-sm">${book.price.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium text-gray-500">Published:</span>
-                      <span className="text-sm">{book.publishYear}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-500">Rating:</span>
-                      <span className="text-amber-500 text-sm font-medium">
-                        {getRatingStars(book.averageRating)} ({book.averageRating})
-                      </span>
+                    
+                    <div className="text-sm font-medium text-gray-500">Goodreads Reviews:</div>
+                    <div className="text-sm font-medium text-purple-600">
+                      {book.goodreadsReviews.toLocaleString()}
                     </div>
                   </div>
                 </div>

@@ -49,7 +49,8 @@ export const searchAmazonBooks = async (searchTerm: string): Promise<BookSearchR
       price: item.Offers.Listings[0].Price.Amount,
       publishYear: parseInt(item.ItemInfo.ContentInfo.PublicationDate.DisplayValue.split('-')[0]),
       averageRating: item.CustomerReviews?.StarRating?.Value || 0,
-      imageUrl: item.Images.Primary.Medium.URL
+      imageUrl: item.Images.Primary.Medium.URL,
+      goodreadsReviews: item.CustomerReviews?.Count || 0
     }));
     */
     
@@ -58,29 +59,32 @@ export const searchAmazonBooks = async (searchTerm: string): Promise<BookSearchR
       {
         title: `${searchTerm} - A Complete Guide`,
         author: "Jane Smith",
-        category: "Non-fiction",
+        category: "Fiction",
         price: 24.99,
         publishYear: 2022,
         averageRating: 4.5,
-        imageUrl: "https://m.media-amazon.com/images/I/51Ga5GuElyL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg"
+        imageUrl: "https://m.media-amazon.com/images/I/51Ga5GuElyL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
+        goodreadsReviews: 1243
       },
       {
         title: `The Art of ${searchTerm}`,
         author: "John Doe",
-        category: "Education",
+        category: "Mystery",
         price: 19.95,
         publishYear: 2021,
         averageRating: 4.2,
-        imageUrl: "https://m.media-amazon.com/images/I/41gr3r3FSWL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg"
+        imageUrl: "https://m.media-amazon.com/images/I/41gr3r3FSWL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
+        goodreadsReviews: 856
       },
       {
         title: `${searchTerm}: A Modern Perspective`,
         author: "Emily Johnson",
-        category: "Academic",
+        category: "Science Fiction",
         price: 32.50,
         publishYear: 2023,
         averageRating: 4.7,
-        imageUrl: "https://m.media-amazon.com/images/I/41C1VkO+oaL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg"
+        imageUrl: "https://m.media-amazon.com/images/I/41C1VkO+oaL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
+        goodreadsReviews: 2105
       }
     ];
   } catch (error) {
