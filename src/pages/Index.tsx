@@ -3,12 +3,13 @@ import { useState } from 'react';
 import BookScoreForm from '@/components/BookScoreForm';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
+import BookSearch from '@/components/BookSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookType } from '@/types/book';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("evaluate");
+  const [activeTab, setActiveTab] = useState<string>("search");
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
@@ -26,11 +27,16 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="search">Search Books</TabsTrigger>
             <TabsTrigger value="evaluate">Evaluate Book</TabsTrigger>
             <TabsTrigger value="results">Results</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="search" className="p-6 bg-white rounded-lg shadow-md">
+            <BookSearch />
+          </TabsContent>
 
           <TabsContent value="evaluate" className="p-6 bg-white rounded-lg shadow-md">
             <BookScoreForm onBookScored={handleBookScored} />
