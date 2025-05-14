@@ -1,4 +1,3 @@
-
 export type CriteriaWeights = {
   price: number;
   publishYear: number;
@@ -28,4 +27,14 @@ export type BookType = {
   };
   totalScore: number;
   date: Date;
+};
+
+export type BookSearchResult = {
+  title: string;
+  author: string;
+  category: string;
+  price: number;
+  publishYear: number;
+  averageRating: number;
+  imageUrl: string | null;
 };

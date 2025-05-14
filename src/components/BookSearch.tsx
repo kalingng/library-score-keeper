@@ -3,18 +3,10 @@ import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Book } from "lucide-react";
+import { Search, Book, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-type BookSearchResult = {
-  title: string;
-  author: string;
-  category: string;
-  price: number;
-  publishYear: number;
-  averageRating: number;
-  imageUrl: string | null;
-};
+import { BookSearchResult } from "@/types/book";
+import { searchAmazonBooks } from "@/utils/amazonApi";
 
 const BookSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,55 +29,23 @@ const BookSearch = () => {
     setIsLoading(true);
     
     try {
-      // Mock API call - in a real application, this would be replaced with an actual API call
-      // We're simulating network delay with setTimeout
-      setTimeout(() => {
-        // Mock data based on search term
-        const mockResults: BookSearchResult[] = [
-          {
-            title: `${searchTerm} - A Complete Guide`,
-            author: "Jane Smith",
-            category: "Non-fiction",
-            price: 24.99,
-            publishYear: 2022,
-            averageRating: 4.5,
-            imageUrl: null
-          },
-          {
-            title: `The Art of ${searchTerm}`,
-            author: "John Doe",
-            category: "Education",
-            price: 19.95,
-            publishYear: 2021,
-            averageRating: 4.2,
-            imageUrl: null
-          },
-          {
-            title: `${searchTerm}: A Modern Perspective`,
-            author: "Emily Johnson",
-            category: "Academic",
-            price: 32.50,
-            publishYear: 2023,
-            averageRating: 4.7,
-            imageUrl: null
-          }
-        ];
-        
-        setSearchResults(mockResults);
-        setIsLoading(false);
-        
-        toast({
-          title: "Search completed",
-          description: `Found ${mockResults.length} books matching "${searchTerm}"`,
-        });
-      }, 1500);
+      // Call the Amazon API search function
+      const results = await searchAmazonBooks(searchTerm);
+      
+      setSearchResults(results);
+      
+      toast({
+        title: "Search completed",
+        description: `Found ${results.length} books matching "${searchTerm}"`,
+      });
     } catch (error) {
-      setIsLoading(false);
       toast({
         title: "Error searching books",
-        description: "There was a problem with your search. Please try again.",
+        description: "There was a problem connecting to the Amazon Product API. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,7 +74,7 @@ const BookSearch = () => {
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-blue-800">Book Search</h2>
-        <p className="text-gray-600">Search for books by title or keywords to get details</p>
+        <p className="text-gray-600">Search for books by title or keywords using Amazon's Product API</p>
       </div>
       
       <form onSubmit={handleSearch} className="flex gap-2">
@@ -130,7 +90,12 @@ const BookSearch = () => {
           />
         </div>
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Searching..." : "Search"}
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Searching...
+            </>
+          ) : "Search"}
         </Button>
       </form>
       
@@ -143,24 +108,37 @@ const BookSearch = () => {
                 <p className="text-sm text-gray-600">by {book.author}</p>
               </CardHeader>
               <CardContent className="pt-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-sm font-medium text-gray-500">Category:</span>
-                    <span className="text-sm">{book.category}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm font-medium text-gray-500">Price:</span>
-                    <span className="text-sm">${book.price.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm font-medium text-gray-500">Published:</span>
-                    <span className="text-sm">{book.publishYear}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-500">Rating:</span>
-                    <span className="text-amber-500 text-sm font-medium">
-                      {getRatingStars(book.averageRating)} ({book.averageRating})
-                    </span>
+                <div className="flex mb-4">
+                  {book.imageUrl ? (
+                    <img 
+                      src={book.imageUrl} 
+                      alt={`Cover of ${book.title}`} 
+                      className="w-20 h-auto object-contain mr-3"
+                    />
+                  ) : (
+                    <div className="w-20 h-28 bg-gray-100 flex items-center justify-center mr-3">
+                      <Book className="h-8 w-8 text-gray-400" />
+                    </div>
+                  )}
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-500">Category:</span>
+                      <span className="text-sm">{book.category}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-500">Price:</span>
+                      <span className="text-sm">${book.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-sm font-medium text-gray-500">Published:</span>
+                      <span className="text-sm">{book.publishYear}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-gray-500">Rating:</span>
+                      <span className="text-amber-500 text-sm font-medium">
+                        {getRatingStars(book.averageRating)} ({book.averageRating})
+                      </span>
+                    </div>
                   </div>
                 </div>
               </CardContent>
