@@ -4,15 +4,84 @@ import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
 import BookSearch from '@/components/BookSearch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookType } from '@/types/book';
+import { BookType, BookSearchResult } from '@/types/book';
+import { v4 as uuidv4 } from 'uuid';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
   const [activeTab, setActiveTab] = useState<string>("search");
+  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
+  };
+
+  const handleBookSelected = (book: BookSearchResult) => {
+    setSelectedBook(book);
+    
+    // Create a new BookType object from the search result
+    const newBook: BookType = {
+      id: uuidv4(),
+      title: book.title,
+      author: book.author,
+      publishYear: book.publishYear,
+      price: book.price,
+      awards: 0, // Default value
+      relevance: 5, // Default value
+      condition: 5, // Default value
+      demand: 5, // Default value
+      scores: {
+        price: calculatePriceScore(book.price),
+        publishYear: calculatePublishYearScore(book.publishYear),
+        awards: 0, // Default value
+        relevance: 5, // Default value
+        condition: 5, // Default value
+        demand: 5, // Default value
+      },
+      totalScore: 0, // Will be calculated
+      date: new Date(),
+      imageUrl: book.imageUrl,
+      averageRating: book.averageRating,
+      goodreadsReviews: book.goodreadsReviews,
+      category: book.category,
+    };
+    
+    // Calculate total score
+    newBook.totalScore = calculateTotalScore(newBook.scores);
+    
+    // Add the book to scored books
+    setScoredBooks(prev => [...prev, newBook]);
+    
+    // Switch to the results tab
     setActiveTab("results");
+  };
+  
+  // Helper function to calculate price score
+  const calculatePriceScore = (price: number) => {
+    if (price <= 10) return 9;
+    if (price <= 20) return 7;
+    if (price <= 30) return 5;
+    if (price <= 40) return 3;
+    return 1;
+  };
+  
+  // Helper function to calculate publish year score
+  const calculatePublishYearScore = (year: number) => {
+    const currentYear = new Date().getFullYear();
+    const age = currentYear - year;
+    
+    if (age <= 1) return 10;
+    if (age <= 3) return 8;
+    if (age <= 5) return 6;
+    if (age <= 10) return 4;
+    return 2;
+  };
+  
+  // Helper function to calculate total score
+  const calculateTotalScore = (scores: any) => {
+    const { price, publishYear, awards, relevance, condition, demand } = scores;
+    const total = (price + publishYear + awards + relevance + condition + demand) / 6;
+    return parseFloat(total.toFixed(1));
   };
 
   return (
@@ -33,7 +102,7 @@ const Index = () => {
           </TabsList>
 
           <TabsContent value="search" className="p-6 bg-white rounded-lg shadow-md">
-            <BookSearch />
+            <BookSearch onSelectBook={handleBookSelected} />
           </TabsContent>
 
           <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md">

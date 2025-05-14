@@ -3,15 +3,20 @@ import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Book, Loader2 } from "lucide-react";
+import { Search, Book, Loader2, ScanBarcode } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BookSearchResult } from "@/types/book";
 import { searchAmazonBooks } from "@/utils/amazonApi";
 
-const BookSearch = () => {
+interface BookSearchProps {
+  onSelectBook?: (book: BookSearchResult) => void;
+}
+
+const BookSearch = ({ onSelectBook }: BookSearchProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
+  const [isScanningBarcode, setIsScanningBarcode] = useState(false);
   const { toast } = useToast();
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -46,6 +51,56 @@ const BookSearch = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleBarcodeScanning = () => {
+    setIsScanningBarcode(true);
+    
+    // In a real implementation, this would access the device camera
+    // and use a barcode scanning library
+    toast({
+      title: "Scanning barcode",
+      description: "Please position the barcode in the center of the camera view"
+    });
+    
+    // Simulate a barcode scan after 2 seconds
+    setTimeout(() => {
+      // This is where you'd implement actual barcode scanning logic
+      // For now we'll just simulate finding a book with a specific ISBN
+      setSearchTerm("9781234567897");
+      handleSearchByBarcode("9781234567897");
+      setIsScanningBarcode(false);
+    }, 2000);
+  };
+  
+  const handleSearchByBarcode = async (isbn: string) => {
+    setIsLoading(true);
+    
+    try {
+      // Call the Amazon API search function with the ISBN
+      const results = await searchAmazonBooks(isbn);
+      
+      setSearchResults(results);
+      
+      toast({
+        title: "Book found",
+        description: `Found book with ISBN: ${isbn}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Error finding book",
+        description: "Could not find a book with this barcode. Please try again or search by title.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSelectBook = (book: BookSearchResult) => {
+    if (onSelectBook) {
+      onSelectBook(book);
     }
   };
 
@@ -86,10 +141,10 @@ const BookSearch = () => {
             className="pl-8"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            disabled={isLoading}
+            disabled={isLoading || isScanningBarcode}
           />
         </div>
-        <Button type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading || isScanningBarcode}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -97,12 +152,34 @@ const BookSearch = () => {
             </>
           ) : "Search"}
         </Button>
+        <Button 
+          type="button" 
+          variant="outline"
+          onClick={handleBarcodeScanning}
+          disabled={isLoading || isScanningBarcode}
+        >
+          {isScanningBarcode ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Scanning...
+            </>
+          ) : (
+            <>
+              <ScanBarcode className="mr-2 h-4 w-4" />
+              Scan Barcode
+            </>
+          )}
+        </Button>
       </form>
       
       {searchResults.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {searchResults.map((book, index) => (
-            <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card 
+              key={index} 
+              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleSelectBook(book)}
+            >
               <CardHeader className="bg-blue-50 pb-2">
                 <CardTitle className="text-lg leading-tight line-clamp-2">{book.title}</CardTitle>
                 <p className="text-sm text-gray-600">by {book.author}</p>
@@ -140,7 +217,7 @@ const BookSearch = () => {
                       {getRatingStars(book.averageRating)} ({book.averageRating})
                     </div>
                     
-                    <div className="text-sm font-medium text-gray-500">Goodreads Reviews:</div>
+                    <div className="text-sm font-medium text-gray-500">Number of reviews on Goodreads:</div>
                     <div className="text-sm font-medium text-purple-600">
                       {book.goodreadsReviews.toLocaleString()}
                     </div>

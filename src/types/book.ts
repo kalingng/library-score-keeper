@@ -28,6 +28,10 @@ export type BookType = {
   };
   totalScore: number;
   date: Date;
+  imageUrl?: string | null;
+  averageRating?: number;
+  goodreadsReviews?: number;
+  category?: string;
 };
 
 export type BookSearchResult = {

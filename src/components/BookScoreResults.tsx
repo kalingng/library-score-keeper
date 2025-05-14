@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Star, BookOpen } from 'lucide-react';
+import { Trophy, Star, BookOpen, Book } from 'lucide-react';
 
 type BookScoreResultsProps = {
   book: BookType | null;
@@ -21,7 +21,7 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
     return (
       <div className="text-center py-10">
         <h3 className="text-xl font-medium text-gray-600">No book evaluated yet</h3>
-        <p className="text-gray-500 mt-2">Fill out the evaluation form to see results here</p>
+        <p className="text-gray-500 mt-2">Search for a book and click on it to see results here</p>
       </div>
     );
   }
@@ -47,10 +47,31 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
     return "bg-red-100 text-red-800";
   };
 
+  const getRatingStars = (rating: number) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+    const stars = [];
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push('★');
+    }
+    
+    if (halfStar) {
+      stars.push('½');
+    }
+    
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push('☆');
+    }
+    
+    return stars.join('');
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+        <Card className="md:col-span-1">
           <CardHeader className="pb-2">
             <CardTitle>Overall Score</CardTitle>
             <CardDescription>Based on all criteria</CardDescription>
@@ -72,33 +93,67 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
 
         <Card className="col-span-1 md:col-span-2">
           <CardHeader className="pb-2">
-            <CardTitle>Book Information</CardTitle>
+            <CardTitle>Book Details</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
-              <div>
-                <p className="text-sm text-gray-500">Title</p>
-                <p className="font-medium">{book.title}</p>
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Book Cover Image */}
+              <div className="flex justify-center">
+                {book.imageUrl ? (
+                  <img 
+                    src={book.imageUrl} 
+                    alt={`Cover of ${book.title}`} 
+                    className="h-64 object-contain rounded-md shadow-sm"
+                  />
+                ) : (
+                  <div className="h-64 w-48 bg-gray-100 flex items-center justify-center rounded-md">
+                    <Book className="h-16 w-16 text-gray-400" />
+                  </div>
+                )}
               </div>
               
-              <div>
-                <p className="text-sm text-gray-500">Author</p>
-                <p className="font-medium">{book.author}</p>
-              </div>
-              
-              <div>
-                <p className="text-sm text-gray-500">Publication Year</p>
-                <p className="font-medium">{book.publishYear}</p>
-              </div>
-              
-              <div>
-                <p className="text-sm text-gray-500">Price</p>
-                <p className="font-medium">${book.price.toFixed(2)}</p>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Trophy className="h-4 w-4 text-amber-500" />
-                <p className="font-medium">{book.awards} Award{book.awards !== 1 ? 's' : ''}</p>
+              {/* Book Information */}
+              <div className="flex-1">
+                <div className="grid grid-cols-1 gap-y-4">
+                  <div>
+                    <p className="text-sm text-gray-500">Title</p>
+                    <p className="font-medium">{book.title}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Author</p>
+                    <p className="font-medium">{book.author}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Genre</p>
+                    <p className="font-medium">{book.category}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Publication Year</p>
+                    <p className="font-medium">{book.publishYear}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Price</p>
+                    <p className="font-medium">${book.price.toFixed(2)}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Rating from Amazon</p>
+                    <p className="text-amber-500 font-medium">
+                      {getRatingStars(book.averageRating)} ({book.averageRating})
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Number of reviews on Goodreads</p>
+                    <p className="font-medium text-purple-600">
+                      {book.goodreadsReviews?.toLocaleString() || "N/A"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </CardContent>
