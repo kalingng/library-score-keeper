@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -7,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Star, BookOpen, Book, Edit } from 'lucide-react';
+import { Trophy, Star, BookOpen, Book, Edit, Timer, CircleMinus } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -29,6 +28,13 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const [isAdjustingScores, setIsAdjustingScores] = useState(false);
   const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
+  const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
+
+  useEffect(() => {
+    if (book) {
+      setOriginalScores({...book.scores});
+    }
+  }, [book?.id]);
 
   if (!book) {
     return (
@@ -44,6 +50,13 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
     if (score >= 6) return "bg-blue-500";
     if (score >= 4) return "bg-yellow-500";
     return "bg-red-500";
+  };
+  
+  const getScoreBackgroundColor = (score: number) => {
+    if (score >= 8) return "#FFDEE2"; // Soft pink for high scores
+    if (score >= 6) return "#FFE8BE"; // Soft yellow for good scores
+    if (score >= 4) return "#E3F2FD"; // Light blue for medium scores
+    return "#D3E4FD"; // Softer blue for low scores
   };
 
   const getRecommendation = (score: number) => {
@@ -105,6 +118,20 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
       });
     }
   };
+  
+  const handleResetScores = () => {
+    if (originalScores && onScoresUpdate) {
+      onScoresUpdate(book.id, originalScores);
+      toast({
+        title: "Scores reset",
+        description: "The book's scores have been reset to original values"
+      });
+      
+      if (isAdjustingScores) {
+        setEditedScores({...originalScores});
+      }
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -117,23 +144,61 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
           <CardContent>
             <div className="flex flex-col items-center">
               <div className="relative w-32 h-32 flex items-center justify-center mb-4">
-                <div className={`absolute inset-0 rounded-full ${getScoreColor(book.totalScore)} opacity-20`}></div>
-                <span className="text-5xl font-bold">{book.totalScore}</span>
-                <span className="text-sm font-medium absolute bottom-3">out of 10</span>
+                <svg className="absolute w-32 h-32" viewBox="0 0 100 100">
+                  <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="45" 
+                    fill="none" 
+                    stroke="#f1f1f1" 
+                    strokeWidth="10" 
+                  />
+                  <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="45" 
+                    fill="none" 
+                    stroke={getScoreColor(book.totalScore)} 
+                    strokeWidth="10" 
+                    strokeDasharray={`${book.totalScore * 28.27} 282.7`} 
+                    strokeDashoffset="0" 
+                    transform="rotate(-90 50 50)" 
+                  />
+                </svg>
+                <div 
+                  className="w-28 h-28 rounded-full flex items-center justify-center" 
+                  style={{ backgroundColor: getScoreBackgroundColor(book.totalScore) }}
+                >
+                  <div className="text-center">
+                    <span className="text-5xl font-bold">{book.totalScore}</span>
+                    <span className="text-sm font-medium block">out of 10</span>
+                  </div>
+                </div>
               </div>
               
               <Badge className={`${getRecommendationClass(book.totalScore)} text-sm px-3 py-1`}>
                 {getRecommendation(book.totalScore)}
               </Badge>
 
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4 w-full"
-                onClick={handleAdjustScores}
-              >
-                <Edit className="h-4 w-4 mr-2" /> Adjust Manually
-              </Button>
+              <div className="flex gap-2 mt-4 w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                  onClick={handleAdjustScores}
+                >
+                  <Edit className="h-4 w-4 mr-2" /> Adjust
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                  onClick={handleResetScores}
+                >
+                  <Timer className="h-4 w-4 mr-2" /> Reset
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -232,7 +297,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Price Value</span>
                 <span className="text-sm font-medium">{book.scores.price}/10</span>
               </div>
-              <Progress value={book.scores.price * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.price]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2"
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      price: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
             
             <div>
@@ -240,7 +320,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Publication Recency</span>
                 <span className="text-sm font-medium">{book.scores.publishYear}/10</span>
               </div>
-              <Progress value={book.scores.publishYear * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.publishYear]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2" 
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      publishYear: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
             
             <div>
@@ -248,7 +343,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Awards Recognition</span>
                 <span className="text-sm font-medium">{book.scores.awards}/10</span>
               </div>
-              <Progress value={book.scores.awards * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.awards]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2"
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      awards: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
             
             <div>
@@ -256,7 +366,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Collection Relevance</span>
                 <span className="text-sm font-medium">{book.scores.relevance}/10</span>
               </div>
-              <Progress value={book.scores.relevance * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.relevance]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2"
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      relevance: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
             
             <div>
@@ -264,7 +389,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Physical Condition</span>
                 <span className="text-sm font-medium">{book.scores.condition}/10</span>
               </div>
-              <Progress value={book.scores.condition * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.condition]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2"
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      condition: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
             
             <div>
@@ -272,11 +412,33 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 <span className="text-sm font-medium">Reader Demand</span>
                 <span className="text-sm font-medium">{book.scores.demand}/10</span>
               </div>
-              <Progress value={book.scores.demand * 10} className="h-2" />
+              <Slider 
+                value={[book.scores.demand]} 
+                min={0} 
+                max={10} 
+                step={1} 
+                className="h-2"
+                onValueChange={(value) => {
+                  if (onScoresUpdate) {
+                    const updatedScores = {
+                      ...book.scores,
+                      demand: value[0]
+                    };
+                    onScoresUpdate(book.id, updatedScores);
+                  }
+                }}
+              />
             </div>
           </div>
 
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-between mt-6">
+            <Button
+              variant="outline"
+              onClick={handleResetScores}
+              className="flex items-center"
+            >
+              <Timer className="h-4 w-4 mr-2" /> Reset Scores
+            </Button>
             <Button
               variant="outline"
               onClick={() => {
@@ -304,6 +466,34 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
           
           {editedScores && (
             <div className="space-y-6 py-4">
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Price Value</span>
+                  <span>{editedScores.price}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.price]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('price', value)} 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Publication Recency</span>
+                  <span>{editedScores.publishYear}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.publishYear]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('publishYear', value)} 
+                />
+              </div>
+              
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>Awards Recognition</span>
@@ -366,8 +556,20 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
             <Button 
               variant="outline" 
               onClick={() => setIsAdjustingScores(false)}
+              className="flex items-center"
             >
               Cancel
+            </Button>
+            <Button 
+              variant="outline" 
+              className="mr-2"
+              onClick={() => {
+                if (originalScores) {
+                  setEditedScores({...originalScores});
+                }
+              }}
+            >
+              <Timer className="h-4 w-4 mr-2" /> Reset
             </Button>
             <Button onClick={handleSaveScores}>Save Changes</Button>
           </DialogFooter>

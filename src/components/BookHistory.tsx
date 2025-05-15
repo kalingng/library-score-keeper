@@ -20,11 +20,13 @@ const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
     book.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatDate = (date: Date) => {
+  const formatDateTime = (date: Date) => {
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
+      year: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
     }).format(new Date(date));
   };
 
@@ -73,7 +75,7 @@ const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
               <TableRow>
                 <TableHead>Title</TableHead>
                 <TableHead>Author</TableHead>
-                <TableHead>Date Evaluated</TableHead>
+                <TableHead>Date & Time</TableHead>
                 <TableHead className="text-right">Score</TableHead>
               </TableRow>
             </TableHeader>
@@ -87,7 +89,7 @@ const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
                   >
                     <TableCell className="font-medium">{book.title}</TableCell>
                     <TableCell>{book.author}</TableCell>
-                    <TableCell>{formatDate(book.date)}</TableCell>
+                    <TableCell>{formatDateTime(book.date)}</TableCell>
                     <TableCell className="text-right">
                       <Badge className={getScoreColor(book.totalScore)}>
                         {book.totalScore}/10
