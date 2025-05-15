@@ -49,10 +49,24 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     );
   }
 
-  const getRainbowColor = (score: number) => {
-    // Rainbow scale for score visualization
-    const hue = Math.min(120, Math.max(0, (score / 10) * 120));
-    return `hsl(${hue}, 100%, 50%)`;
+  // Spectral-10 color scale for score visualization
+  const spectral10Colors = [
+    "#9e0142", // Score 0-1: Dark red
+    "#d53e4f", // Score 1-2: Red
+    "#f46d43", // Score 2-3: Orange-red
+    "#fdae61", // Score 3-4: Light orange
+    "#fee08b", // Score 4-5: Yellow
+    "#e6f598", // Score 5-6: Light yellow-green
+    "#abdda4", // Score 6-7: Light green
+    "#66c2a5", // Score 7-8: Teal
+    "#3288bd", // Score 8-9: Blue
+    "#5e4fa2"  // Score 9-10: Purple
+  ];
+  
+  const getSpectralColor = (score: number) => {
+    // Calculate which color to use based on the value
+    const colorIndex = Math.min(9, Math.floor((score / 10) * 10));
+    return spectral10Colors[colorIndex];
   };
   
   const getScoreBackgroundColor = (score: number) => {
@@ -188,7 +202,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                     cy="50" 
                     r="45" 
                     fill="none" 
-                    stroke={getRainbowColor(book.totalScore)} 
+                    stroke={getSpectralColor(book.totalScore)} 
                     strokeWidth="10" 
                     strokeDasharray={`${book.totalScore * 28.27} 282.7`} 
                     strokeDashoffset="0" 

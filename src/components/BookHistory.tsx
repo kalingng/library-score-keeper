@@ -5,15 +5,19 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { BookOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { BookOpen, Book, Trash2 } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type BookHistoryProps = {
   books: BookType[];
   onSelectBook?: (book: BookType) => void;
+  onDeleteBook?: (bookId: string) => void;
 };
 
-const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
+const BookHistory = ({ books, onSelectBook, onDeleteBook }: BookHistoryProps) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const isMobile = useIsMobile();
 
   const filteredBooks = books.filter(book => 
     book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -43,6 +47,13 @@ const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
     }
   };
 
+  const handleDelete = (e: React.MouseEvent, bookId: string) => {
+    e.stopPropagation();
+    if (onDeleteBook) {
+      onDeleteBook(bookId);
+    }
+  };
+
   if (books.length === 0) {
     return (
       <div className="text-center py-10">
@@ -68,46 +79,125 @@ const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
         </p>
       </div>
       
-      <Card>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Author</TableHead>
-                <TableHead>Date & Time</TableHead>
-                <TableHead className="text-right">Score</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredBooks.length > 0 ? (
-                filteredBooks.map((book) => (
-                  <TableRow 
-                    key={book.id}
-                    className="cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleRowClick(book)}
-                  >
-                    <TableCell className="font-medium">{book.title}</TableCell>
-                    <TableCell>{book.author}</TableCell>
-                    <TableCell>{formatDateTime(book.date)}</TableCell>
-                    <TableCell className="text-right">
+      {isMobile ? (
+        // Mobile view with cards
+        <div className="grid grid-cols-1 gap-4">
+          {filteredBooks.length > 0 ? (
+            filteredBooks.map((book) => (
+              <Card 
+                key={book.id}
+                className="overflow-hidden cursor-pointer"
+                onClick={() => handleRowClick(book)}
+              >
+                <div className="p-4 flex items-center gap-4">
+                  <div className="flex-shrink-0">
+                    {book.imageUrl ? (
+                      <img 
+                        src={book.imageUrl} 
+                        alt={`Cover of ${book.title}`} 
+                        className="w-16 h-24 object-cover rounded-sm" 
+                      />
+                    ) : (
+                      <div className="w-16 h-24 bg-gray-100 flex items-center justify-center rounded-sm">
+                        <Book className="h-6 w-6 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-semibold truncate">{book.title}</h4>
+                    <p className="text-xs text-gray-600">{book.author}</p>
+                    <p className="text-xs text-gray-500 mt-1">{formatDateTime(book.date)}</p>
+                    <div className="flex justify-between mt-2">
                       <Badge className={getScoreColor(book.totalScore)}>
                         {book.totalScore}/10
                       </Badge>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 hover:bg-red-50 hover:text-red-600"
+                        onClick={(e) => handleDelete(e, book.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <div className="text-center p-6 border rounded-md">
+              <p className="text-gray-500">No books found matching your search.</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        // Desktop view with table
+        <Card>
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80px]">Cover</TableHead>
+                  <TableHead>Title</TableHead>
+                  <TableHead>Author</TableHead>
+                  <TableHead>Date & Time</TableHead>
+                  <TableHead className="text-right">Score</TableHead>
+                  <TableHead className="w-[80px] text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredBooks.length > 0 ? (
+                  filteredBooks.map((book) => (
+                    <TableRow 
+                      key={book.id}
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleRowClick(book)}
+                    >
+                      <TableCell>
+                        {book.imageUrl ? (
+                          <img 
+                            src={book.imageUrl} 
+                            alt={`Cover of ${book.title}`} 
+                            className="w-10 h-14 object-cover rounded-sm"
+                          />
+                        ) : (
+                          <div className="w-10 h-14 bg-gray-100 flex items-center justify-center rounded-sm">
+                            <Book className="h-4 w-4 text-gray-400" />
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{book.title}</TableCell>
+                      <TableCell>{book.author}</TableCell>
+                      <TableCell>{formatDateTime(book.date)}</TableCell>
+                      <TableCell className="text-right">
+                        <Badge className={getScoreColor(book.totalScore)}>
+                          {book.totalScore}/10
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
+                          onClick={(e) => handleDelete(e, book.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                      No books found matching your search.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
-                    No books found matching your search.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </Card>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
+      )}
     </div>
   );
 };

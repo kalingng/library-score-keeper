@@ -12,9 +12,23 @@ const Slider = React.forwardRef<
   const value = props.value?.[0] || 0;
   const max = props.max || 10;
   
-  // Convert value to a hue (0-120 for a red to green gradient)
-  const hue = Math.min(120, Math.max(0, (value / max) * 120));
-  const color = `hsl(${hue}, 100%, 50%)`;
+  // Use Spectral-10 color scale (values from loading.io/color/feature/Spectral-10/)
+  const spectral10Colors = [
+    "#9e0142", // Score 0-1: Dark red
+    "#d53e4f", // Score 1-2: Red
+    "#f46d43", // Score 2-3: Orange-red
+    "#fdae61", // Score 3-4: Light orange
+    "#fee08b", // Score 4-5: Yellow
+    "#e6f598", // Score 5-6: Light yellow-green
+    "#abdda4", // Score 6-7: Light green
+    "#66c2a5", // Score 7-8: Teal
+    "#3288bd", // Score 8-9: Blue
+    "#5e4fa2"  // Score 9-10: Purple
+  ];
+  
+  // Calculate which color to use based on the value
+  const colorIndex = Math.min(9, Math.floor((value / max) * 10));
+  const color = spectral10Colors[colorIndex];
 
   return (
     <SliderPrimitive.Root

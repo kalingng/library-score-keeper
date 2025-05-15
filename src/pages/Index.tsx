@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -7,6 +6,7 @@ import BookFavourites from '@/components/BookFavourites';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookType, BookSearchResult } from '@/types/book';
 import { v4 as uuidv4 } from 'uuid';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
@@ -15,6 +15,7 @@ const Index = () => {
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
   const [selectedHistoryBook, setSelectedHistoryBook] = useState<BookType | null>(null);
   const [selectedFavouriteBook, setSelectedFavouriteBook] = useState<BookType | null>(null);
+  const { toast } = useToast();
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
@@ -136,6 +137,29 @@ const Index = () => {
     }));
   };
 
+  // Add a handler for deleting books from history
+  const handleDeleteBookFromHistory = (bookId: string) => {
+    setScoredBooks(prev => prev.filter(book => book.id !== bookId));
+    
+    // If the deleted book is the selected book, clear the selection
+    if (selectedHistoryBook && selectedHistoryBook.id === bookId) {
+      setSelectedHistoryBook(null);
+    }
+    
+    // Also remove from favorites if it exists there
+    if (favouriteBooks.some(book => book.id === bookId)) {
+      setFavouriteBooks(prev => prev.filter(book => book.id !== bookId));
+      if (selectedFavouriteBook && selectedFavouriteBook.id === bookId) {
+        setSelectedFavouriteBook(null);
+      }
+    }
+    
+    toast({
+      title: "Book deleted",
+      description: "The book has been removed from your history"
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto py-8 px-4">
@@ -175,6 +199,13 @@ const Index = () => {
               onSelectBook={handleFavouriteBookSelected}
               onRemoveFromFavourites={(bookId) => {
                 setFavouriteBooks(prev => prev.filter(book => book.id !== bookId));
+                if (selectedFavouriteBook && selectedFavouriteBook.id === bookId) {
+                  setSelectedFavouriteBook(null);
+                }
+                toast({
+                  title: "Removed from favourites",
+                  description: "The book has been removed from your favourites"
+                });
               }}
             />
           </TabsContent>
@@ -183,6 +214,7 @@ const Index = () => {
             <BookHistory 
               books={scoredBooks} 
               onSelectBook={handleHistoryBookSelected}
+              onDeleteBook={handleDeleteBookFromHistory}
             />
           </TabsContent>
         </Tabs>

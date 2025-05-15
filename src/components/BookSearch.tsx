@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -134,8 +133,8 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
         <p className="text-gray-600">Search for books by title or keywords using Amazon's Product API</p>
       </div>
       
-      <form onSubmit={handleSearch} className={`flex flex-col ${isMobile ? "gap-3" : "flex-row gap-2"}`}>
-        <div className={`relative ${isMobile ? "w-full" : "flex-1"}`}>
+      <form onSubmit={handleSearch} className="flex flex-col gap-4">
+        <div className="relative w-full">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
           <Input
             type="text"
@@ -147,25 +146,30 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
           />
         </div>
         
-        <div className={`flex ${isMobile ? "flex-row gap-2" : ""}`}>
+        <div className="flex justify-center gap-4">
           <Button 
             type="submit" 
             disabled={isLoading || isScanningBarcode}
-            className={`${isMobile ? "flex-1" : ""}`}
+            className="w-40"
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Searching...
               </>
-            ) : "Search"}
+            ) : (
+              <>
+                <Search className="mr-2 h-4 w-4" />
+                Search
+              </>
+            )}
           </Button>
           <Button 
             type="button" 
             variant="outline"
             onClick={handleBarcodeScanning}
             disabled={isLoading || isScanningBarcode}
-            className={`${isMobile ? "flex-1" : "ml-2"}`}
+            className="w-40"
           >
             {isScanningBarcode ? (
               <>
@@ -175,7 +179,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
             ) : (
               <>
                 <ScanBarcode className="mr-2 h-4 w-4" />
-                {isMobile ? "Scan" : "Scan Barcode"}
+                Scan Barcode
               </>
             )}
           </Button>
