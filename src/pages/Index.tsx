@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -165,8 +166,10 @@ const Index = () => {
       <div className="container mx-auto py-8 px-4">
         <header className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-2">Book Acquisition Scoring Tool</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Evaluate books based on multiple criteria to make informed acquisition decisions for your library.
+          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            Evaluate books based on your criteria
+            <br />
+            to make informed acquisition decisions for your library.
           </p>
         </header>
 

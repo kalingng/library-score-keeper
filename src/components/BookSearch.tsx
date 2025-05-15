@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -130,7 +131,6 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
     <div className="space-y-6">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-blue-800">Book Search</h2>
-        <p className="text-gray-600">Search for books by title or keywords using Amazon's Product API</p>
       </div>
       
       <form onSubmit={handleSearch} className="flex flex-col gap-4">

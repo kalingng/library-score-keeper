@@ -24,16 +24,6 @@ const BookFavourites = ({ books, onSelectBook, onRemoveFromFavourites }: BookFav
     book.author.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatDateTime = (date: Date) => {
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    }).format(new Date(date));
-  };
-
   const getScoreColor = (score: number) => {
     if (score >= 8) return "bg-green-100 text-green-800";
     if (score >= 6) return "bg-blue-100 text-blue-800";
@@ -139,7 +129,6 @@ const BookFavourites = ({ books, onSelectBook, onRemoveFromFavourites }: BookFav
                   <TableHead className="w-[80px]">Cover</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Author</TableHead>
-                  <TableHead>Date & Time</TableHead>
                   <TableHead className="text-center">Score</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
@@ -167,7 +156,6 @@ const BookFavourites = ({ books, onSelectBook, onRemoveFromFavourites }: BookFav
                       </TableCell>
                       <TableCell className="font-medium">{book.title}</TableCell>
                       <TableCell>{book.author}</TableCell>
-                      <TableCell>{formatDateTime(book.date)}</TableCell>
                       <TableCell className="text-center">
                         <Badge className={getScoreColor(book.totalScore)}>
                           {book.totalScore}/10
@@ -187,7 +175,7 @@ const BookFavourites = ({ books, onSelectBook, onRemoveFromFavourites }: BookFav
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                    <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
                       No books found matching your search.
                     </TableCell>
                   </TableRow>
