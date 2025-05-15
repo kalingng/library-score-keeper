@@ -9,9 +9,10 @@ import { BookOpen } from 'lucide-react';
 
 type BookHistoryProps = {
   books: BookType[];
+  onSelectBook?: (book: BookType) => void;
 };
 
-const BookHistory = ({ books }: BookHistoryProps) => {
+const BookHistory = ({ books, onSelectBook }: BookHistoryProps) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredBooks = books.filter(book => 
@@ -32,6 +33,12 @@ const BookHistory = ({ books }: BookHistoryProps) => {
     if (score >= 6) return "bg-blue-100 text-blue-800";
     if (score >= 4) return "bg-yellow-100 text-yellow-800";
     return "bg-red-100 text-red-800";
+  };
+
+  const handleRowClick = (book: BookType) => {
+    if (onSelectBook) {
+      onSelectBook(book);
+    }
   };
 
   if (books.length === 0) {
@@ -73,7 +80,11 @@ const BookHistory = ({ books }: BookHistoryProps) => {
             <TableBody>
               {filteredBooks.length > 0 ? (
                 filteredBooks.map((book) => (
-                  <TableRow key={book.id}>
+                  <TableRow 
+                    key={book.id}
+                    className="cursor-pointer hover:bg-gray-50"
+                    onClick={() => handleRowClick(book)}
+                  >
                     <TableCell className="font-medium">{book.title}</TableCell>
                     <TableCell>{book.author}</TableCell>
                     <TableCell>{formatDate(book.date)}</TableCell>

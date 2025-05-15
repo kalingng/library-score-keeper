@@ -32,6 +32,8 @@ export type BookType = {
   averageRating?: number;
   goodreadsReviews?: number;
   category?: string;
+  isbn?: string;
+  publisher?: string;
 };
 
 export type BookSearchResult = {
@@ -43,4 +45,6 @@ export type BookSearchResult = {
   averageRating: number;
   imageUrl: string | null;
   goodreadsReviews: number;
+  isbn?: string;
+  publisher?: string;
 };

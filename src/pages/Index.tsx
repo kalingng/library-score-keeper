@@ -11,6 +11,7 @@ const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
   const [activeTab, setActiveTab] = useState<string>("search");
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
+  const [selectedHistoryBook, setSelectedHistoryBook] = useState<BookType | null>(null);
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
@@ -44,6 +45,8 @@ const Index = () => {
       averageRating: book.averageRating,
       goodreadsReviews: book.goodreadsReviews,
       category: book.category,
+      isbn: book.isbn,
+      publisher: book.publisher
     };
     
     // Calculate total score
@@ -53,6 +56,11 @@ const Index = () => {
     setScoredBooks(prev => [...prev, newBook]);
     
     // Switch to the results tab
+    setActiveTab("results");
+  };
+
+  const handleHistoryBookSelected = (book: BookType) => {
+    setSelectedHistoryBook(book);
     setActiveTab("results");
   };
   
@@ -84,6 +92,27 @@ const Index = () => {
     return parseFloat(total.toFixed(1));
   };
 
+  // Function to update book scores
+  const handleUpdateBookScores = (bookId: string, updatedScores: BookType['scores']) => {
+    setScoredBooks(prev => prev.map(book => {
+      if (book.id === bookId) {
+        const updatedBook = {
+          ...book,
+          scores: updatedScores,
+          // Update individual score properties
+          awards: updatedScores.awards,
+          relevance: updatedScores.relevance,
+          condition: updatedScores.condition,
+          demand: updatedScores.demand
+        };
+        // Recalculate total score
+        updatedBook.totalScore = calculateTotalScore(updatedScores);
+        return updatedBook;
+      }
+      return book;
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto py-8 px-4">
@@ -107,12 +136,16 @@ const Index = () => {
 
           <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md">
             <BookScoreResults 
-              book={scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null}
+              book={selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
+              onScoresUpdate={handleUpdateBookScores}
             />
           </TabsContent>
 
           <TabsContent value="history" className="p-6 bg-white rounded-lg shadow-md">
-            <BookHistory books={scoredBooks} />
+            <BookHistory 
+              books={scoredBooks} 
+              onSelectBook={handleHistoryBookSelected}
+            />
           </TabsContent>
         </Tabs>
       </div>

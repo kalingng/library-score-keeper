@@ -7,15 +7,28 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Star, BookOpen, Book } from 'lucide-react';
+import { Trophy, Star, BookOpen, Book, Edit } from 'lucide-react';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogDescription,
+  DialogFooter
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 
 type BookScoreResultsProps = {
   book: BookType | null;
+  onScoresUpdate?: (bookId: string, scores: BookType['scores']) => void;
 };
 
-const BookScoreResults = ({ book }: BookScoreResultsProps) => {
+const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
   const { toast } = useToast();
   const [showDetails, setShowDetails] = useState(false);
+  const [isAdjustingScores, setIsAdjustingScores] = useState(false);
+  const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
 
   if (!book) {
     return (
@@ -68,6 +81,31 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
     return stars.join('');
   };
 
+  const handleAdjustScores = () => {
+    setEditedScores({ ...book.scores });
+    setIsAdjustingScores(true);
+  };
+
+  const handleScoreChange = (criterion: keyof BookType['scores'], value: number[]) => {
+    if (editedScores) {
+      setEditedScores({
+        ...editedScores,
+        [criterion]: value[0]
+      });
+    }
+  };
+
+  const handleSaveScores = () => {
+    if (editedScores && onScoresUpdate) {
+      onScoresUpdate(book.id, editedScores);
+      setIsAdjustingScores(false);
+      toast({
+        title: "Scores updated",
+        description: "The book's scores have been adjusted successfully"
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -87,6 +125,15 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
               <Badge className={`${getRecommendationClass(book.totalScore)} text-sm px-3 py-1`}>
                 {getRecommendation(book.totalScore)}
               </Badge>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4 w-full"
+                onClick={handleAdjustScores}
+              >
+                <Edit className="h-4 w-4 mr-2" /> Adjust Manually
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -129,6 +176,16 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
                     <p className="text-sm text-gray-500">Genre</p>
                     <p className="font-medium">{book.category}</p>
                   </div>
+
+                  <div>
+                    <p className="text-sm text-gray-500">ISBN</p>
+                    <p className="font-medium">{book.isbn || "N/A"}</p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm text-gray-500">Publisher</p>
+                    <p className="font-medium">{book.publisher || "N/A"}</p>
+                  </div>
                   
                   <div>
                     <p className="text-sm text-gray-500">Publication Year</p>
@@ -143,7 +200,7 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
                   <div>
                     <p className="text-sm text-gray-500">Rating from Amazon</p>
                     <p className="text-amber-500 font-medium">
-                      {getRatingStars(book.averageRating)} ({book.averageRating})
+                      {getRatingStars(book.averageRating || 0)} ({book.averageRating || "N/A"})
                     </p>
                   </div>
                   
@@ -234,6 +291,88 @@ const BookScoreResults = ({ book }: BookScoreResultsProps) => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Score Adjustment Dialog */}
+      <Dialog open={isAdjustingScores} onOpenChange={setIsAdjustingScores}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Adjust Scores Manually</DialogTitle>
+            <DialogDescription>
+              Move the sliders to adjust the individual scores for this book
+            </DialogDescription>
+          </DialogHeader>
+          
+          {editedScores && (
+            <div className="space-y-6 py-4">
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Awards Recognition</span>
+                  <span>{editedScores.awards}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.awards]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('awards', value)} 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Collection Relevance</span>
+                  <span>{editedScores.relevance}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.relevance]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('relevance', value)} 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Physical Condition</span>
+                  <span>{editedScores.condition}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.condition]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('condition', value)} 
+                />
+              </div>
+              
+              <div className="space-y-3">
+                <Label className="flex justify-between">
+                  <span>Reader Demand</span>
+                  <span>{editedScores.demand}/10</span>
+                </Label>
+                <Slider 
+                  value={[editedScores.demand]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  onValueChange={(value) => handleScoreChange('demand', value)} 
+                />
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsAdjustingScores(false)}
+            >
+              Cancel
+            </Button>
+            <Button onClick={handleSaveScores}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

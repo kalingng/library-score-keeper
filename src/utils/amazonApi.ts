@@ -64,7 +64,9 @@ export const searchAmazonBooks = async (searchTerm: string): Promise<BookSearchR
         publishYear: 2022,
         averageRating: 4.5,
         imageUrl: "https://m.media-amazon.com/images/I/51Ga5GuElyL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
-        goodreadsReviews: 1243
+        goodreadsReviews: 1243,
+        isbn: "978-1234567897",
+        publisher: "Penguin Random House"
       },
       {
         title: `The Art of ${searchTerm}`,
@@ -74,7 +76,9 @@ export const searchAmazonBooks = async (searchTerm: string): Promise<BookSearchR
         publishYear: 2021,
         averageRating: 4.2,
         imageUrl: "https://m.media-amazon.com/images/I/41gr3r3FSWL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
-        goodreadsReviews: 856
+        goodreadsReviews: 856,
+        isbn: "978-7654321098",
+        publisher: "HarperCollins"
       },
       {
         title: `${searchTerm}: A Modern Perspective`,
@@ -84,7 +88,9 @@ export const searchAmazonBooks = async (searchTerm: string): Promise<BookSearchR
         publishYear: 2023,
         averageRating: 4.7,
         imageUrl: "https://m.media-amazon.com/images/I/41C1VkO+oaL._SX218_BO1,204,203,200_QL40_FMwebp_.jpg",
-        goodreadsReviews: 2105
+        goodreadsReviews: 2105,
+        isbn: "978-9876543210",
+        publisher: "Simon & Schuster"
       }
     ];
   } catch (error) {
