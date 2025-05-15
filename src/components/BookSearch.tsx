@@ -7,6 +7,7 @@ import { Search, Book, Loader2, ScanBarcode } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { BookSearchResult } from "@/types/book";
 import { searchAmazonBooks } from "@/utils/amazonApi";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface BookSearchProps {
   onSelectBook?: (book: BookSearchResult) => void;
@@ -18,6 +19,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
   const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
   const [isScanningBarcode, setIsScanningBarcode] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,8 +134,8 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
         <p className="text-gray-600">Search for books by title or keywords using Amazon's Product API</p>
       </div>
       
-      <form onSubmit={handleSearch} className="flex gap-2">
-        <div className="relative flex-1">
+      <form onSubmit={handleSearch} className={`flex flex-col ${isMobile ? "gap-3" : "flex-row gap-2"}`}>
+        <div className={`relative ${isMobile ? "w-full" : "flex-1"}`}>
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
           <Input
             type="text"
@@ -144,32 +146,40 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
             disabled={isLoading || isScanningBarcode}
           />
         </div>
-        <Button type="submit" disabled={isLoading || isScanningBarcode}>
-          {isLoading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Searching...
-            </>
-          ) : "Search"}
-        </Button>
-        <Button 
-          type="button" 
-          variant="outline"
-          onClick={handleBarcodeScanning}
-          disabled={isLoading || isScanningBarcode}
-        >
-          {isScanningBarcode ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Scanning...
-            </>
-          ) : (
-            <>
-              <ScanBarcode className="mr-2 h-4 w-4" />
-              Scan Barcode
-            </>
-          )}
-        </Button>
+        
+        <div className={`flex ${isMobile ? "flex-row gap-2" : ""}`}>
+          <Button 
+            type="submit" 
+            disabled={isLoading || isScanningBarcode}
+            className={`${isMobile ? "flex-1" : ""}`}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Searching...
+              </>
+            ) : "Search"}
+          </Button>
+          <Button 
+            type="button" 
+            variant="outline"
+            onClick={handleBarcodeScanning}
+            disabled={isLoading || isScanningBarcode}
+            className={`${isMobile ? "flex-1" : "ml-2"}`}
+          >
+            {isScanningBarcode ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Scanning...
+              </>
+            ) : (
+              <>
+                <ScanBarcode className="mr-2 h-4 w-4" />
+                {isMobile ? "Scan" : "Scan Barcode"}
+              </>
+            )}
+          </Button>
+        </div>
       </form>
       
       {searchResults.length > 0 && (

@@ -1,12 +1,12 @@
+
 import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Star, BookOpen, Book, Edit, Timer, CircleMinus } from 'lucide-react';
+import { Trophy, Star, BookOpen, Book, Edit, Timer, CircleMinus, Heart } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -17,14 +17,18 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 type BookScoreResultsProps = {
   book: BookType | null;
   onScoresUpdate?: (bookId: string, scores: BookType['scores']) => void;
+  onToggleFavourite?: (book: BookType) => void;
+  isFavourited?: boolean;
 };
 
-const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
+const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourited = false }: BookScoreResultsProps) => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [showDetails, setShowDetails] = useState(false);
   const [isAdjustingScores, setIsAdjustingScores] = useState(false);
   const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
@@ -45,15 +49,14 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
     );
   }
 
-  const getScoreColor = (score: number) => {
-    if (score >= 8) return "bg-green-500";
-    if (score >= 6) return "bg-blue-500";
-    if (score >= 4) return "bg-yellow-500";
-    return "bg-red-500";
+  const getRainbowColor = (score: number) => {
+    // Rainbow scale for score visualization
+    const hue = Math.min(120, Math.max(0, (score / 10) * 120));
+    return `hsl(${hue}, 100%, 50%)`;
   };
   
   const getScoreBackgroundColor = (score: number) => {
-    if (score >= 8) return "#FFDEE2"; // Soft pink for high scores
+    if (score >= 8) return "#FFE8E8"; // Lighter red for high scores
     if (score >= 6) return "#FFE8BE"; // Soft yellow for good scores
     if (score >= 4) return "#E3F2FD"; // Light blue for medium scores
     return "#D3E4FD"; // Softer blue for low scores
@@ -132,14 +135,41 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
       }
     }
   };
+  
+  const handleFavouriteToggle = () => {
+    if (onToggleFavourite && book) {
+      onToggleFavourite(book);
+      toast({
+        title: isFavourited ? "Removed from favourites" : "Added to favourites",
+        description: isFavourited ? 
+          "The book has been removed from your favourites" : 
+          "The book has been added to your favourites"
+      });
+    }
+  };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1">
           <CardHeader className="pb-2">
-            <CardTitle>Overall Score</CardTitle>
-            <CardDescription>Based on all criteria</CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle>Overall Score</CardTitle>
+                <CardDescription>Based on all criteria</CardDescription>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 w-8 p-0"
+                onClick={handleFavouriteToggle}
+                title={isFavourited ? "Remove from favourites" : "Add to favourites"}
+              >
+                <Heart 
+                  className={`h-5 w-5 ${isFavourited ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} 
+                />
+              </Button>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col items-center">
@@ -158,7 +188,7 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                     cy="50" 
                     r="45" 
                     fill="none" 
-                    stroke={getScoreColor(book.totalScore)} 
+                    stroke={getRainbowColor(book.totalScore)} 
                     strokeWidth="10" 
                     strokeDasharray={`${book.totalScore * 28.27} 282.7`} 
                     strokeDashoffset="0" 
@@ -198,6 +228,148 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 >
                   <Timer className="h-4 w-4 mr-2" /> Reset
                 </Button>
+              </div>
+            </div>
+
+            {/* Criteria Scores - Now directly below the overall score */}
+            <div className="space-y-4 mt-6">
+              <h3 className="text-sm font-medium mb-2">Criteria Scores</h3>
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Price Value</span>
+                  <span className="text-xs font-medium">{book.scores.price}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.price]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2"
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        price: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Publication</span>
+                  <span className="text-xs font-medium">{book.scores.publishYear}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.publishYear]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2" 
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        publishYear: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Awards</span>
+                  <span className="text-xs font-medium">{book.scores.awards}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.awards]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2"
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        awards: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Relevance</span>
+                  <span className="text-xs font-medium">{book.scores.relevance}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.relevance]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2"
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        relevance: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Condition</span>
+                  <span className="text-xs font-medium">{book.scores.condition}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.condition]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2"
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        condition: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
+              </div>
+              
+              <div>
+                <div className="flex justify-between mb-1">
+                  <span className="text-xs">Demand</span>
+                  <span className="text-xs font-medium">{book.scores.demand}/10</span>
+                </div>
+                <Slider 
+                  value={[book.scores.demand]} 
+                  min={0} 
+                  max={10} 
+                  step={1} 
+                  className="h-2"
+                  onValueChange={(value) => {
+                    if (onScoresUpdate) {
+                      const updatedScores = {
+                        ...book.scores,
+                        demand: value[0]
+                      };
+                      onScoresUpdate(book.id, updatedScores);
+                    }
+                  }}
+                />
               </div>
             </div>
           </CardContent>
@@ -278,181 +450,22 @@ const BookScoreResults = ({ book, onScoresUpdate }: BookScoreResultsProps) => {
                 </div>
               </div>
             </div>
+            <div className="flex justify-end mt-6">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  toast({
+                    title: "Score details copied",
+                    description: "Book evaluation details copied to clipboard"
+                  });
+                }}
+              >
+                Copy Report
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="flex items-center">
-            <Star className="h-5 w-5 text-amber-500 mr-2" />
-            Criteria Scores
-          </CardTitle>
-          <CardDescription>Individual scores for each evaluation criteria</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Price Value</span>
-                <span className="text-sm font-medium">{book.scores.price}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.price]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2"
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      price: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Publication Recency</span>
-                <span className="text-sm font-medium">{book.scores.publishYear}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.publishYear]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2" 
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      publishYear: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Awards Recognition</span>
-                <span className="text-sm font-medium">{book.scores.awards}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.awards]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2"
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      awards: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Collection Relevance</span>
-                <span className="text-sm font-medium">{book.scores.relevance}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.relevance]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2"
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      relevance: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Physical Condition</span>
-                <span className="text-sm font-medium">{book.scores.condition}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.condition]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2"
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      condition: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-            
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Reader Demand</span>
-                <span className="text-sm font-medium">{book.scores.demand}/10</span>
-              </div>
-              <Slider 
-                value={[book.scores.demand]} 
-                min={0} 
-                max={10} 
-                step={1} 
-                className="h-2"
-                onValueChange={(value) => {
-                  if (onScoresUpdate) {
-                    const updatedScores = {
-                      ...book.scores,
-                      demand: value[0]
-                    };
-                    onScoresUpdate(book.id, updatedScores);
-                  }
-                }}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-between mt-6">
-            <Button
-              variant="outline"
-              onClick={handleResetScores}
-              className="flex items-center"
-            >
-              <Timer className="h-4 w-4 mr-2" /> Reset Scores
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                toast({
-                  title: "Score details copied",
-                  description: "Book evaluation details copied to clipboard"
-                });
-              }}
-            >
-              Copy Report
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Score Adjustment Dialog */}
       <Dialog open={isAdjustingScores} onOpenChange={setIsAdjustingScores}>

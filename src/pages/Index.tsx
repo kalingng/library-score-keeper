@@ -3,15 +3,18 @@ import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
 import BookSearch from '@/components/BookSearch';
+import BookFavourites from '@/components/BookFavourites';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookType, BookSearchResult } from '@/types/book';
 import { v4 as uuidv4 } from 'uuid';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
+  const [favouriteBooks, setFavouriteBooks] = useState<BookType[]>([]);
   const [activeTab, setActiveTab] = useState<string>("search");
   const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
   const [selectedHistoryBook, setSelectedHistoryBook] = useState<BookType | null>(null);
+  const [selectedFavouriteBook, setSelectedFavouriteBook] = useState<BookType | null>(null);
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
@@ -63,7 +66,27 @@ const Index = () => {
     setSelectedHistoryBook(book);
     setActiveTab("results");
   };
+
+  const handleFavouriteBookSelected = (book: BookType) => {
+    setSelectedFavouriteBook(book);
+    setActiveTab("results");
+  };
   
+  const toggleFavourite = (book: BookType) => {
+    const isFavourited = favouriteBooks.some(favBook => favBook.id === book.id);
+    
+    if (isFavourited) {
+      setFavouriteBooks(prev => prev.filter(favBook => favBook.id !== book.id));
+    } else {
+      setFavouriteBooks(prev => [...prev, book]);
+    }
+  };
+  
+  // Helper function to check if a book is favourited
+  const isBookFavourited = (bookId: string) => {
+    return favouriteBooks.some(book => book.id === bookId);
+  };
+
   // Helper function to calculate price score
   const calculatePriceScore = (price: number) => {
     if (price <= 10) return 9;
@@ -124,9 +147,10 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="search">Search Books</TabsTrigger>
             <TabsTrigger value="results">Results</TabsTrigger>
+            <TabsTrigger value="favourites">Favourites</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
           </TabsList>
 
@@ -136,8 +160,22 @@ const Index = () => {
 
           <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md">
             <BookScoreResults 
-              book={selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
+              book={selectedFavouriteBook || selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
               onScoresUpdate={handleUpdateBookScores}
+              onToggleFavourite={toggleFavourite}
+              isFavourited={selectedHistoryBook ? isBookFavourited(selectedHistoryBook.id) : 
+                            selectedFavouriteBook ? isBookFavourited(selectedFavouriteBook.id) : 
+                            scoredBooks.length > 0 ? isBookFavourited(scoredBooks[scoredBooks.length - 1].id) : false}
+            />
+          </TabsContent>
+
+          <TabsContent value="favourites" className="p-6 bg-white rounded-lg shadow-md">
+            <BookFavourites 
+              books={favouriteBooks} 
+              onSelectBook={handleFavouriteBookSelected}
+              onRemoveFromFavourites={(bookId) => {
+                setFavouriteBooks(prev => prev.filter(book => book.id !== bookId));
+              }}
             />
           </TabsContent>
 
