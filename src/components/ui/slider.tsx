@@ -12,23 +12,23 @@ const Slider = React.forwardRef<
   const value = props.value?.[0] || 0;
   const max = props.max || 10;
   
-  // Use Spectral-10 color scale (values from loading.io/color/feature/Spectral-10/)
-  const spectral10Colors = [
-    "#5e4fa2", // Score 0: Blue (lowest)
-    "#3288bd", // Score 1: Light blue
-    "#66c2a5", // Score 2: Teal
-    "#abdda4", // Score 3: Light green
-    "#e6f598", // Score 4: Yellow-green
-    "#fee08b", // Score 5: Light yellow
-    "#fdae61", // Score 6: Light orange
-    "#f46d43", // Score 7: Orange-red
-    "#d53e4f", // Score 8-9: Red
-    "#9e0142"  // Score 10: Dark red (highest)
+  // Updated color palette from the attached image (10 colors from burgundy to grey)
+  const updatedColorPalette = [
+    "#CCCCCC", // Score 0: Grey (lowest)
+    "#3F7CAC", // Score 1: Blue
+    "#65B2A9", // Score 2: Teal
+    "#8EC386", // Score 3: Green
+    "#B6CF71", // Score 4: Light Green
+    "#E0DC62", // Score 5: Yellow
+    "#F9D45B", // Score 6: Light Orange
+    "#F6B26A", // Score 7: Orange
+    "#E6866A", // Score 8: Light Red
+    "#9E1C47"  // Score 9-10: Burgundy (highest)
   ];
   
   // Calculate which color to use based on the value
   const colorIndex = Math.min(9, Math.floor((value / max) * 10));
-  const color = spectral10Colors[colorIndex];
+  const color = updatedColorPalette[colorIndex];
 
   return (
     <SliderPrimitive.Root

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,24 +48,24 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     );
   }
 
-  // Spectral-10 color scale for score visualization
-  const spectral10Colors = [
-    "#5e4fa2", // Score 0: Blue
-    "#3288bd", // Score 1: Light blue
-    "#66c2a5", // Score 2: Teal
-    "#abdda4", // Score 3: Light green
-    "#e6f598", // Score 4: Yellow-green
-    "#fee08b", // Score 5: Light yellow
-    "#fdae61", // Score 6: Light orange
-    "#f46d43", // Score 7: Orange-red
-    "#d53e4f", // Score 8-9: Red
-    "#9e0142"  // Score 10: Dark red
+  // Updated color palette from the attached image (10 colors from burgundy to grey)
+  const updatedColorPalette = [
+    "#CCCCCC", // Score 0: Grey (lowest)
+    "#3F7CAC", // Score 1: Blue
+    "#65B2A9", // Score 2: Teal
+    "#8EC386", // Score 3: Green
+    "#B6CF71", // Score 4: Light Green
+    "#E0DC62", // Score 5: Yellow
+    "#F9D45B", // Score 6: Light Orange
+    "#F6B26A", // Score 7: Orange
+    "#E6866A", // Score 8: Light Red
+    "#9E1C47"  // Score 9-10: Burgundy (highest)
   ];
   
   const getSpectralColor = (score: number) => {
     // Calculate which color to use based on the value
     const colorIndex = Math.min(9, Math.floor((score / 10) * 10));
-    return spectral10Colors[colorIndex];
+    return updatedColorPalette[colorIndex];
   };
   
   const getScoreBackgroundColor = (score: number) => {
@@ -229,15 +228,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   variant="outline"
                   size="sm"
                   className="flex-1"
-                  onClick={handleAdjustScores}
-                >
-                  <Edit className="h-4 w-4 mr-2" /> Adjust
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1"
                   onClick={handleResetScores}
                 >
                   <Timer className="h-4 w-4 mr-2" /> Reset
@@ -245,12 +235,12 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               </div>
             </div>
 
-            {/* Criteria Scores - Now directly below the overall score */}
+            {/* Criteria Scores with updated labels */}
             <div className="space-y-4 mt-6">
               <h3 className="text-sm font-medium mb-2">Criteria Scores</h3>
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Price Value</span>
+                  <span className="text-xs">How Affordable</span>
                   <span className="text-xs font-medium">{book.scores.price}/10</span>
                 </div>
                 <Slider 
@@ -273,7 +263,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Publication</span>
+                  <span className="text-xs">How New</span>
                   <span className="text-xs font-medium">{book.scores.publishYear}/10</span>
                 </div>
                 <Slider 
@@ -296,7 +286,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Amazon Rating</span>
+                  <span className="text-xs">How Good</span>
                   <span className="text-xs font-medium">{book.scores.averageRating}/10</span>
                 </div>
                 <Slider 
@@ -319,7 +309,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Goodreads Reviews</span>
+                  <span className="text-xs">How Popular</span>
                   <span className="text-xs font-medium">{book.scores.goodreadsReviews}/10</span>
                 </div>
                 <Slider 
@@ -449,7 +439,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
             <div className="space-y-6 py-4">
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Price Value</span>
+                  <span>How Affordable</span>
                   <span>{editedScores.price}/10</span>
                 </Label>
                 <Slider 
@@ -471,7 +461,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Publication Year</span>
+                  <span>How New</span>
                   <span>{editedScores.publishYear}/10</span>
                 </Label>
                 <Slider 
@@ -493,7 +483,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Amazon Rating</span>
+                  <span>How Good</span>
                   <span>{editedScores.averageRating}/10</span>
                 </Label>
                 <Slider 
@@ -515,7 +505,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Goodreads Reviews</span>
+                  <span>How Popular</span>
                   <span>{editedScores.goodreadsReviews}/10</span>
                 </Label>
                 <Slider 
