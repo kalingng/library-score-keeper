@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -110,11 +111,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     return stars.join('');
   };
 
-  const handleAdjustScores = () => {
-    setEditedScores({ ...book.scores });
-    setIsAdjustingScores(true);
-  };
-
   const handleScoreChange = (criterion: keyof BookType['scores'], value: number[]) => {
     if (editedScores) {
       setEditedScores({
@@ -164,11 +160,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1">
+        <Card className="md:col-span-1 bg-gradient-to-b from-blue-50 to-white border border-blue-100">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
               <div>
-                <CardTitle>Overall Score</CardTitle>
+                <CardTitle className="text-blue-800">Overall Score</CardTitle>
                 <CardDescription>Based on all criteria</CardDescription>
               </div>
               <Button
@@ -237,10 +233,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
             {/* Criteria Scores with updated labels */}
             <div className="space-y-4 mt-6">
-              <h3 className="text-sm font-medium mb-2">Criteria Scores</h3>
+              <h3 className="text-sm font-medium mb-2 text-blue-700">Criteria Scores</h3>
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">How Affordable</span>
+                  <span className="text-xs text-blue-700">How Affordable</span>
                   <span className="text-xs font-medium">{book.scores.price}/10</span>
                 </div>
                 <Slider 
@@ -263,7 +259,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">How New</span>
+                  <span className="text-xs text-blue-700">How New</span>
                   <span className="text-xs font-medium">{book.scores.publishYear}/10</span>
                 </div>
                 <Slider 
@@ -286,7 +282,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">How Good</span>
+                  <span className="text-xs text-blue-700">How Good</span>
                   <span className="text-xs font-medium">{book.scores.averageRating}/10</span>
                 </div>
                 <Slider 
@@ -309,7 +305,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">How Popular</span>
+                  <span className="text-xs text-blue-700">How Popular</span>
                   <span className="text-xs font-medium">{book.scores.goodreadsReviews}/10</span>
                 </div>
                 <Slider 
@@ -329,13 +325,45 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   }}
                 />
               </div>
+              
+              {/* New criteria */}
+              <div className="mt-8 space-y-2 pt-4 border-t border-blue-100">
+                <h3 className="text-sm font-medium text-purple-700">Additional Criteria</h3>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-purple-700">Got any prize?</span>
+                  <Badge variant={book.hasPrize ? "default" : "outline"} className={book.hasPrize ? "bg-purple-500" : ""}>
+                    {book.hasPrize ? "+5" : "0"}
+                  </Badge>
+                </div>
+                
+                {book.hasPrize && book.prizeDetails && (
+                  <div className="bg-purple-50 p-2 rounded-md text-xs text-purple-800 ml-4">
+                    <Trophy className="inline h-3 w-3 mr-1" /> {book.prizeDetails}
+                  </div>
+                )}
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-purple-700">Include JEDI?</span>
+                  <Badge variant={book.hasJEDI ? "default" : "outline"} className={book.hasJEDI ? "bg-purple-500" : ""}>
+                    {book.hasJEDI ? "+5" : "0"}
+                  </Badge>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-purple-700">Not in other libraries?</span>
+                  <Badge variant={book.notInOtherLibraries ? "default" : "outline"} className={book.notInOtherLibraries ? "bg-purple-500" : ""}>
+                    {book.notInOtherLibraries ? "+5" : "0"}
+                  </Badge>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 md:col-span-2">
+        <Card className="col-span-1 md:col-span-2 bg-gradient-to-b from-purple-50 to-white border border-purple-100">
           <CardHeader className="pb-2">
-            <CardTitle>Book Details</CardTitle>
+            <CardTitle className="text-purple-800">Book Details</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex flex-col md:flex-row gap-6">
@@ -345,11 +373,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   <img 
                     src={book.imageUrl} 
                     alt={`Cover of ${book.title}`} 
-                    className="h-64 object-contain rounded-md shadow-sm"
+                    className="h-64 object-contain rounded-md shadow-sm border border-purple-100"
                   />
                 ) : (
-                  <div className="h-64 w-48 bg-gray-100 flex items-center justify-center rounded-md">
-                    <Book className="h-16 w-16 text-gray-400" />
+                  <div className="h-64 w-48 bg-purple-100 flex items-center justify-center rounded-md border border-purple-200">
+                    <Book className="h-16 w-16 text-purple-400" />
                   </div>
                 )}
               </div>
@@ -358,52 +386,75 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div className="flex-1">
                 <div className="grid grid-cols-1 gap-y-4">
                   <div>
-                    <p className="text-sm text-gray-500">Title</p>
-                    <p className="font-medium">{book.title}</p>
+                    <p className="text-sm text-purple-500">Title</p>
+                    <p className="font-medium text-purple-900">{book.title}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Author</p>
-                    <p className="font-medium">{book.author}</p>
+                    <p className="text-sm text-purple-500">Author</p>
+                    <p className="font-medium text-purple-900">{book.author}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Genre</p>
-                    <p className="font-medium">{book.category}</p>
+                    <p className="text-sm text-purple-500">Genre</p>
+                    <p className="font-medium text-purple-900">{book.category}</p>
                   </div>
 
                   <div>
-                    <p className="text-sm text-gray-500">ISBN</p>
-                    <p className="font-medium">{book.isbn || "N/A"}</p>
+                    <p className="text-sm text-purple-500">ISBN</p>
+                    <p className="font-medium text-purple-900">{book.isbn || "N/A"}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Publisher</p>
-                    <p className="font-medium">{book.publisher || "N/A"}</p>
+                    <p className="text-sm text-purple-500">Publisher</p>
+                    <p className="font-medium text-purple-900">{book.publisher || "N/A"}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Publication Year</p>
-                    <p className="font-medium">{book.publishYear}</p>
+                    <p className="text-sm text-purple-500">Publication Year</p>
+                    <p className="font-medium text-purple-900">{book.publishYear}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Price</p>
-                    <p className="font-medium">${book.price.toFixed(2)}</p>
+                    <p className="text-sm text-purple-500">Price</p>
+                    <p className="font-medium text-purple-900">${book.price.toFixed(2)}</p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Rating from Amazon</p>
+                    <p className="text-sm text-purple-500">Rating from Amazon</p>
                     <p className="text-amber-500 font-medium">
                       {getRatingStars(book.averageRating || 0)} ({book.averageRating || "N/A"})
                     </p>
                   </div>
                   
                   <div>
-                    <p className="text-sm text-gray-500">Number of reviews on Goodreads</p>
-                    <p className="font-medium text-purple-600">
+                    <p className="text-sm text-purple-500">Number of reviews on Goodreads</p>
+                    <p className="font-medium text-purple-700">
                       {book.goodreadsReviews?.toLocaleString() || "N/A"}
                     </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-sm text-purple-500">Special Attributes</p>
+                    <div className="flex flex-wrap gap-2">
+                      {book.hasPrize && (
+                        <Badge variant="secondary" className="bg-amber-100 text-amber-800 border border-amber-200">
+                          <Trophy className="h-3 w-3 mr-1" /> Award Winner
+                        </Badge>
+                      )}
+                      
+                      {book.hasJEDI && (
+                        <Badge variant="secondary" className="bg-green-100 text-green-800 border border-green-200">
+                          <Star className="h-3 w-3 mr-1" /> JEDI Content
+                        </Badge>
+                      )}
+                      
+                      {book.notInOtherLibraries && (
+                        <Badge variant="secondary" className="bg-blue-100 text-blue-800 border border-blue-200">
+                          <BookOpen className="h-3 w-3 mr-1" /> Exclusive
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -411,6 +462,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
             <div className="flex justify-end mt-6">
               <Button
                 variant="outline"
+                className="bg-white hover:bg-purple-50 border-purple-200 text-purple-700 hover:text-purple-900"
                 onClick={() => {
                   toast({
                     title: "Score details copied",

@@ -4,6 +4,9 @@ export type CriteriaWeights = {
   publishYear: number;
   averageRating: number;
   goodreadsReviews: number;
+  hasPrize: number;
+  hasJEDI: number;
+  notInOtherLibraries: number;
 };
 
 export type BookType = {
@@ -17,6 +20,9 @@ export type BookType = {
     publishYear: number;
     averageRating: number;
     goodreadsReviews: number;
+    hasPrize: number;
+    hasJEDI: number;
+    notInOtherLibraries: number;
   };
   totalScore: number;
   date: Date;
@@ -26,6 +32,10 @@ export type BookType = {
   category?: string;
   isbn?: string;
   publisher?: string;
+  hasPrize: boolean;
+  prizeDetails?: string;
+  hasJEDI: boolean;
+  notInOtherLibraries: boolean;
 };
 
 export type BookSearchResult = {
@@ -39,4 +49,8 @@ export type BookSearchResult = {
   goodreadsReviews: number;
   isbn?: string;
   publisher?: string;
+  hasPrize?: boolean;
+  prizeDetails?: string;
+  hasJEDI?: boolean;
+  notInOtherLibraries?: boolean;
 };

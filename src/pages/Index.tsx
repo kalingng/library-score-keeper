@@ -37,6 +37,9 @@ const Index = () => {
         publishYear: calculatePublishYearScore(book.publishYear),
         averageRating: calculateAmazonRatingScore(book.averageRating),
         goodreadsReviews: calculateGoodreadsReviewsScore(book.goodreadsReviews),
+        hasPrize: book.hasPrize ? 5 : 0,
+        hasJEDI: book.hasJEDI ? 5 : 0,
+        notInOtherLibraries: book.notInOtherLibraries ? 5 : 0,
       },
       totalScore: 0, // Will be calculated
       date: new Date(),
@@ -45,7 +48,11 @@ const Index = () => {
       goodreadsReviews: book.goodreadsReviews,
       category: book.category,
       isbn: book.isbn,
-      publisher: book.publisher
+      publisher: book.publisher,
+      hasPrize: book.hasPrize || false,
+      prizeDetails: book.prizeDetails || "",
+      hasJEDI: book.hasJEDI || false,
+      notInOtherLibraries: book.notInOtherLibraries || false,
     };
     
     // Calculate total score
@@ -153,11 +160,21 @@ const Index = () => {
     return 0; // 0-10 reviews
   };
   
-  // Helper function to calculate total score
-  const calculateTotalScore = (scores: any) => {
-    const { price, publishYear, averageRating, goodreadsReviews } = scores;
-    const total = (price + publishYear + averageRating + goodreadsReviews) / 4;
-    return parseFloat(total.toFixed(1));
+  // Helper function to calculate total score including new criteria
+  const calculateTotalScore = (scores: BookType['scores']) => {
+    const { price, publishYear, averageRating, goodreadsReviews, hasPrize, hasJEDI, notInOtherLibraries } = scores;
+    
+    // Calculate base score (average of the original 4 criteria)
+    const baseScore = (price + publishYear + averageRating + goodreadsReviews) / 4;
+    
+    // Add bonus points for the new criteria (0 or 5 for each)
+    const bonusPoints = (hasPrize + hasJEDI + notInOtherLibraries) / 7;
+    
+    // Calculate final score (capped at 10)
+    let totalScore = baseScore + bonusPoints;
+    if (totalScore > 10) totalScore = 10;
+    
+    return parseFloat(totalScore.toFixed(1));
   };
 
   // Function to update book scores
@@ -203,7 +220,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <div className="container mx-auto py-8 px-4">
         <header className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-blue-800 mb-2">Book Acquisition Scoring Tool</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-purple-800 mb-2">Book Acquisition Scoring Tool</h1>
           <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Evaluate books based on your criteria
             <br />
@@ -212,18 +229,18 @@ const Index = () => {
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-4xl mx-auto">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="search">Search Books</TabsTrigger>
-            <TabsTrigger value="results">Results</TabsTrigger>
-            <TabsTrigger value="favourites">Favourites</TabsTrigger>
-            <TabsTrigger value="history">History</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 bg-blue-50 p-1">
+            <TabsTrigger value="search" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">Search Books</TabsTrigger>
+            <TabsTrigger value="results" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">Results</TabsTrigger>
+            <TabsTrigger value="favourites" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">Favourites</TabsTrigger>
+            <TabsTrigger value="history" className="data-[state=active]:bg-white data-[state=active]:text-blue-700">History</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search" className="p-6 bg-white rounded-lg shadow-md">
+          <TabsContent value="search" className="p-6 bg-white rounded-lg shadow-md border border-blue-50">
             <BookSearch onSelectBook={handleBookSelected} />
           </TabsContent>
 
-          <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md">
+          <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md border border-blue-50">
             <BookScoreResults 
               book={selectedFavouriteBook || selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
               onScoresUpdate={handleUpdateBookScores}
@@ -234,7 +251,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="favourites" className="p-6 bg-white rounded-lg shadow-md">
+          <TabsContent value="favourites" className="p-6 bg-white rounded-lg shadow-md border border-blue-50">
             <BookFavourites 
               books={favouriteBooks} 
               onSelectBook={handleFavouriteBookSelected}
@@ -251,7 +268,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="history" className="p-6 bg-white rounded-lg shadow-md">
+          <TabsContent value="history" className="p-6 bg-white rounded-lg shadow-md border border-blue-50">
             <BookHistory 
               books={scoredBooks} 
               onSelectBook={handleHistoryBookSelected}
