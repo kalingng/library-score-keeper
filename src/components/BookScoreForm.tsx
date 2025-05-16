@@ -25,10 +25,8 @@ const formSchema = z.object({
   author: z.string().min(1, { message: "Author is required" }),
   publishYear: z.coerce.number().int().min(1000).max(new Date().getFullYear()),
   price: z.coerce.number().min(0),
-  awards: z.coerce.number().int().min(0),
-  relevance: z.coerce.number().min(1).max(10),
-  condition: z.coerce.number().min(1).max(10),
-  demand: z.coerce.number().min(1).max(10),
+  averageRating: z.coerce.number().min(0).max(5).optional(),
+  goodreadsReviews: z.coerce.number().int().min(0).optional(),
 });
 
 type BookScoreFormProps = {
@@ -37,9 +35,6 @@ type BookScoreFormProps = {
 
 const BookScoreForm = ({ onBookScored }: BookScoreFormProps) => {
   const { toast } = useToast();
-  const [relevanceValue, setRelevanceValue] = useState([5]);
-  const [conditionValue, setConditionValue] = useState([5]);
-  const [demandValue, setDemandValue] = useState([5]);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,10 +43,8 @@ const BookScoreForm = ({ onBookScored }: BookScoreFormProps) => {
       author: "",
       publishYear: new Date().getFullYear(),
       price: 19.99,
-      awards: 0,
-      relevance: 5,
-      condition: 5,
-      demand: 5,
+      averageRating: 4.0,
+      goodreadsReviews: 1000,
     },
   });
   
@@ -63,10 +56,8 @@ const BookScoreForm = ({ onBookScored }: BookScoreFormProps) => {
         author: values.author,
         publishYear: values.publishYear,
         price: values.price,
-        awards: values.awards,
-        relevance: relevanceValue[0],
-        condition: conditionValue[0],
-        demand: demandValue[0],
+        averageRating: values.averageRating,
+        goodreadsReviews: values.goodreadsReviews,
       };
       
       // Calculate scores
@@ -168,113 +159,32 @@ const BookScoreForm = ({ onBookScored }: BookScoreFormProps) => {
                 
                 <FormField
                   control={form.control}
-                  name="awards"
+                  name="averageRating"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Number of Awards</FormLabel>
+                      <FormLabel>Amazon Rating (0-5)</FormLabel>
+                      <FormControl>
+                        <Input type="number" min="0" max="5" step="0.1" {...field} />
+                      </FormControl>
+                      <FormDescription>
+                        Average rating on Amazon (0-5 stars)
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="goodreadsReviews"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Goodreads Reviews Count</FormLabel>
                       <FormControl>
                         <Input type="number" min="0" {...field} />
                       </FormControl>
                       <FormDescription>
-                        How many awards/prizes has this book received?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <h3 className="text-lg font-medium mb-4">Subjective Criteria</h3>
-              
-              <div className="space-y-8">
-                <FormField
-                  control={form.control}
-                  name="relevance"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Relevance to Collection (1-10)</FormLabel>
-                      <FormControl>
-                        <Slider
-                          value={relevanceValue}
-                          min={1}
-                          max={10}
-                          step={1}
-                          onValueChange={(value) => {
-                            setRelevanceValue(value);
-                            field.onChange(value[0]);
-                          }}
-                        />
-                      </FormControl>
-                      <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                        <span>Low Relevance (1)</span>
-                        <span>Current: {relevanceValue}</span>
-                        <span>High Relevance (10)</span>
-                      </div>
-                      <FormDescription>
-                        How well does this book fit your library's collection?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="condition"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Condition (1-10)</FormLabel>
-                      <FormControl>
-                        <Slider
-                          value={conditionValue}
-                          min={1}
-                          max={10}
-                          step={1}
-                          onValueChange={(value) => {
-                            setConditionValue(value);
-                            field.onChange(value[0]);
-                          }}
-                        />
-                      </FormControl>
-                      <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                        <span>Poor (1)</span>
-                        <span>Current: {conditionValue}</span>
-                        <span>Excellent (10)</span>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="demand"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Reader Demand (1-10)</FormLabel>
-                      <FormControl>
-                        <Slider
-                          value={demandValue}
-                          min={1}
-                          max={10}
-                          step={1}
-                          onValueChange={(value) => {
-                            setDemandValue(value);
-                            field.onChange(value[0]);
-                          }}
-                        />
-                      </FormControl>
-                      <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                        <span>Low Demand (1)</span>
-                        <span>Current: {demandValue}</span>
-                        <span>High Demand (10)</span>
-                      </div>
-                      <FormDescription>
-                        Expected popularity among readers
+                        Number of reviews on Goodreads
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
