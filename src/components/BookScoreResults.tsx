@@ -51,16 +51,16 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
   // Spectral-10 color scale for score visualization
   const spectral10Colors = [
-    "#9e0142", // Score 0-1: Dark red
-    "#d53e4f", // Score 1-2: Red
-    "#f46d43", // Score 2-3: Orange-red
-    "#fdae61", // Score 3-4: Light orange
-    "#fee08b", // Score 4-5: Yellow
-    "#e6f598", // Score 5-6: Light yellow-green
-    "#abdda4", // Score 6-7: Light green
-    "#66c2a5", // Score 7-8: Teal
-    "#3288bd", // Score 8-9: Blue
-    "#5e4fa2"  // Score 9-10: Purple
+    "#5e4fa2", // Score 0: Blue
+    "#3288bd", // Score 1: Light blue
+    "#66c2a5", // Score 2: Teal
+    "#abdda4", // Score 3: Light green
+    "#e6f598", // Score 4: Yellow-green
+    "#fee08b", // Score 5: Light yellow
+    "#fdae61", // Score 6: Light orange
+    "#f46d43", // Score 7: Orange-red
+    "#d53e4f", // Score 8-9: Red
+    "#9e0142"  // Score 10: Dark red
   ];
   
   const getSpectralColor = (score: number) => {
@@ -505,6 +505,14 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('price', value)} 
                 />
+                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
+                  <span>&lt;£2</span>
+                  <span>£2-8</span>
+                  <span>£8-17</span>
+                  <span>£17-23</span>
+                  <span>£23-29</span>
+                  <span>&gt;£29</span>
+                </div>
               </div>
               
               <div className="space-y-3">
@@ -519,11 +527,19 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('publishYear', value)} 
                 />
+                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
+                  <span>0-1 yrs</span>
+                  <span>1-6 yrs</span>
+                  <span>6-12 yrs</span>
+                  <span>12-16 yrs</span>
+                  <span>16-18 yrs</span>
+                  <span>&gt;18 yrs</span>
+                </div>
               </div>
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Awards Recognition</span>
+                  <span>Amazon Rating</span>
                   <span>{editedScores.awards}/10</span>
                 </Label>
                 <Slider 
@@ -533,11 +549,19 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('awards', value)} 
                 />
+                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
+                  <span>4.5-5.0</span>
+                  <span>3.5-4.5</span>
+                  <span>2.5-3.5</span>
+                  <span>1.5-2.5</span>
+                  <span>0.5-1.5</span>
+                  <span>0.0-0.5</span>
+                </div>
               </div>
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Collection Relevance</span>
+                  <span>Goodreads Reviews</span>
                   <span>{editedScores.relevance}/10</span>
                 </Label>
                 <Slider 
@@ -547,6 +571,14 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('relevance', value)} 
                 />
+                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
+                  <span>&gt;100k</span>
+                  <span>10k-100k</span>
+                  <span>1k-10k</span>
+                  <span>250-1k</span>
+                  <span>50-250</span>
+                  <span>&lt;50</span>
+                </div>
               </div>
               
               <div className="space-y-3">

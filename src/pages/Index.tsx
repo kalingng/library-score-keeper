@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -39,8 +38,8 @@ const Index = () => {
       scores: {
         price: calculatePriceScore(book.price),
         publishYear: calculatePublishYearScore(book.publishYear),
-        awards: 0, // Default value
-        relevance: 5, // Default value
+        awards: calculateAmazonRatingScore(book.averageRating),
+        relevance: calculateGoodreadsReviewsScore(book.goodreadsReviews),
         condition: 5, // Default value
         demand: 5, // Default value
       },
@@ -91,23 +90,71 @@ const Index = () => {
 
   // Helper function to calculate price score
   const calculatePriceScore = (price: number) => {
-    if (price <= 10) return 9;
-    if (price <= 20) return 7;
-    if (price <= 30) return 5;
-    if (price <= 40) return 3;
-    return 1;
+    // Convert price to pounds if needed (assuming price is in dollars)
+    const priceInPounds = price * 0.8; // Approximate USD to GBP conversion
+    
+    if (priceInPounds < 2) return 10;
+    if (priceInPounds < 5) return 9;
+    if (priceInPounds < 8) return 8;
+    if (priceInPounds < 11) return 7;
+    if (priceInPounds < 14) return 6;
+    if (priceInPounds < 17) return 5;
+    if (priceInPounds < 20) return 4;
+    if (priceInPounds < 23) return 3;
+    if (priceInPounds < 26) return 2;
+    if (priceInPounds < 29) return 1;
+    return 0; // Over £29
   };
   
   // Helper function to calculate publish year score
   const calculatePublishYearScore = (year: number) => {
     const currentYear = new Date().getFullYear();
-    const age = currentYear - year;
+    const yearsAgo = currentYear - year;
     
-    if (age <= 1) return 10;
-    if (age <= 3) return 8;
-    if (age <= 5) return 6;
-    if (age <= 10) return 4;
-    return 2;
+    if (yearsAgo <= 1) return 10;
+    if (yearsAgo <= 2) return 9;
+    if (yearsAgo <= 4) return 8;
+    if (yearsAgo <= 6) return 7;
+    if (yearsAgo <= 8) return 6;
+    if (yearsAgo <= 10) return 5;
+    if (yearsAgo <= 12) return 4;
+    if (yearsAgo <= 14) return 3;
+    if (yearsAgo <= 16) return 2;
+    if (yearsAgo <= 18) return 1;
+    return 0; // Over 18 years ago
+  };
+  
+  // Helper function to calculate Amazon rating score
+  const calculateAmazonRatingScore = (rating: number) => {
+    if (!rating) return 5; // Default value if no rating available
+    
+    if (rating >= 4.5) return 10;
+    if (rating >= 4.0) return 9;
+    if (rating >= 3.5) return 8;
+    if (rating >= 3.0) return 7;
+    if (rating >= 2.5) return 6;
+    if (rating >= 2.0) return 5;
+    if (rating >= 1.5) return 4;
+    if (rating >= 1.0) return 3;
+    if (rating >= 0.5) return 2;
+    return 1; // Rating between 0.0-0.5
+  };
+  
+  // Helper function to calculate Goodreads reviews score
+  const calculateGoodreadsReviewsScore = (reviewCount: number) => {
+    if (!reviewCount) return 5; // Default value if no review count available
+    
+    if (reviewCount > 100000) return 10;
+    if (reviewCount > 50000) return 9;
+    if (reviewCount > 10000) return 8;
+    if (reviewCount > 5000) return 7;
+    if (reviewCount > 1000) return 6;
+    if (reviewCount > 500) return 5;
+    if (reviewCount > 250) return 4;
+    if (reviewCount > 100) return 3;
+    if (reviewCount > 50) return 2;
+    if (reviewCount > 10) return 1;
+    return 0; // 0-10 reviews
   };
   
   // Helper function to calculate total score
