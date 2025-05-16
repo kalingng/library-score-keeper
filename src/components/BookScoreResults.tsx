@@ -296,11 +296,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Awards</span>
-                  <span className="text-xs font-medium">{book.scores.awards}/10</span>
+                  <span className="text-xs">Amazon Rating</span>
+                  <span className="text-xs font-medium">{book.scores.averageRating}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.awards]} 
+                  value={[book.scores.averageRating]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -309,7 +309,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                     if (onScoresUpdate) {
                       const updatedScores = {
                         ...book.scores,
-                        awards: value[0]
+                        averageRating: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
                     }
@@ -319,11 +319,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs">Relevance</span>
-                  <span className="text-xs font-medium">{book.scores.relevance}/10</span>
+                  <span className="text-xs">Goodreads Reviews</span>
+                  <span className="text-xs font-medium">{book.scores.goodreadsReviews}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.relevance]} 
+                  value={[book.scores.goodreadsReviews]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -332,53 +332,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                     if (onScoresUpdate) {
                       const updatedScores = {
                         ...book.scores,
-                        relevance: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                    }
-                  }}
-                />
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-xs">Condition</span>
-                  <span className="text-xs font-medium">{book.scores.condition}/10</span>
-                </div>
-                <Slider 
-                  value={[book.scores.condition]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2"
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        condition: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                    }
-                  }}
-                />
-              </div>
-              
-              <div>
-                <div className="flex justify-between mb-1">
-                  <span className="text-xs">Demand</span>
-                  <span className="text-xs font-medium">{book.scores.demand}/10</span>
-                </div>
-                <Slider 
-                  value={[book.scores.demand]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2"
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        demand: value[0]
+                        goodreadsReviews: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
                     }
@@ -517,7 +471,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
-                  <span>Publication Recency</span>
+                  <span>Publication Year</span>
                   <span>{editedScores.publishYear}/10</span>
                 </Label>
                 <Slider 
@@ -529,10 +483,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 />
                 <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
                   <span>0-1 yrs</span>
-                  <span>1-6 yrs</span>
-                  <span>6-12 yrs</span>
-                  <span>12-16 yrs</span>
-                  <span>16-18 yrs</span>
+                  <span>1-4 yrs</span>
+                  <span>4-10 yrs</span>
+                  <span>10-14 yrs</span>
+                  <span>14-18 yrs</span>
                   <span>&gt;18 yrs</span>
                 </div>
               </div>
@@ -540,73 +494,45 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>Amazon Rating</span>
-                  <span>{editedScores.awards}/10</span>
+                  <span>{editedScores.averageRating}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.awards]} 
+                  value={[editedScores.averageRating]} 
                   min={0} 
                   max={10} 
                   step={1} 
-                  onValueChange={(value) => handleScoreChange('awards', value)} 
+                  onValueChange={(value) => handleScoreChange('averageRating', value)} 
                 />
                 <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
                   <span>4.5-5.0</span>
-                  <span>3.5-4.5</span>
-                  <span>2.5-3.5</span>
-                  <span>1.5-2.5</span>
-                  <span>0.5-1.5</span>
-                  <span>0.0-0.5</span>
+                  <span>4.0-4.4</span>
+                  <span>3.5-3.9</span>
+                  <span>2.5-3.4</span>
+                  <span>0.5-2.4</span>
+                  <span>0.0</span>
                 </div>
               </div>
               
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>Goodreads Reviews</span>
-                  <span>{editedScores.relevance}/10</span>
+                  <span>{editedScores.goodreadsReviews}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.relevance]} 
+                  value={[editedScores.goodreadsReviews]} 
                   min={0} 
                   max={10} 
                   step={1} 
-                  onValueChange={(value) => handleScoreChange('relevance', value)} 
+                  onValueChange={(value) => handleScoreChange('goodreadsReviews', value)} 
                 />
                 <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
                   <span>&gt;100k</span>
-                  <span>10k-100k</span>
+                  <span>50k-100k</span>
+                  <span>10k-50k</span>
                   <span>1k-10k</span>
-                  <span>250-1k</span>
-                  <span>50-250</span>
-                  <span>&lt;50</span>
+                  <span>11-1k</span>
+                  <span>&lt;10</span>
                 </div>
-              </div>
-              
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>Physical Condition</span>
-                  <span>{editedScores.condition}/10</span>
-                </Label>
-                <Slider 
-                  value={[editedScores.condition]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('condition', value)} 
-                />
-              </div>
-              
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>Reader Demand</span>
-                  <span>{editedScores.demand}/10</span>
-                </Label>
-                <Slider 
-                  value={[editedScores.demand]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('demand', value)} 
-                />
               </div>
             </div>
           )}

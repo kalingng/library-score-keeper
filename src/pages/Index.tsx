@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -31,17 +32,11 @@ const Index = () => {
       author: book.author,
       publishYear: book.publishYear,
       price: book.price,
-      awards: 0, // Default value
-      relevance: 5, // Default value
-      condition: 5, // Default value
-      demand: 5, // Default value
       scores: {
         price: calculatePriceScore(book.price),
         publishYear: calculatePublishYearScore(book.publishYear),
-        awards: calculateAmazonRatingScore(book.averageRating),
-        relevance: calculateGoodreadsReviewsScore(book.goodreadsReviews),
-        condition: 5, // Default value
-        demand: 5, // Default value
+        averageRating: calculateAmazonRatingScore(book.averageRating),
+        goodreadsReviews: calculateGoodreadsReviewsScore(book.goodreadsReviews),
       },
       totalScore: 0, // Will be calculated
       date: new Date(),
@@ -88,7 +83,7 @@ const Index = () => {
     return favouriteBooks.some(book => book.id === bookId);
   };
 
-  // Helper function to calculate price score
+  // Helper function to calculate price score based on the provided criteria
   const calculatePriceScore = (price: number) => {
     // Convert price to pounds if needed (assuming price is in dollars)
     const priceInPounds = price * 0.8; // Approximate USD to GBP conversion
@@ -106,7 +101,7 @@ const Index = () => {
     return 0; // Over £29
   };
   
-  // Helper function to calculate publish year score
+  // Helper function to calculate publish year score based on the provided criteria
   const calculatePublishYearScore = (year: number) => {
     const currentYear = new Date().getFullYear();
     const yearsAgo = currentYear - year;
@@ -124,7 +119,7 @@ const Index = () => {
     return 0; // Over 18 years ago
   };
   
-  // Helper function to calculate Amazon rating score
+  // Helper function to calculate Amazon rating score based on the provided criteria
   const calculateAmazonRatingScore = (rating: number) => {
     if (!rating) return 5; // Default value if no rating available
     
@@ -137,10 +132,11 @@ const Index = () => {
     if (rating >= 1.5) return 4;
     if (rating >= 1.0) return 3;
     if (rating >= 0.5) return 2;
-    return 1; // Rating between 0.0-0.5
+    if (rating > 0.0) return 1; // Rating between 0.1-0.4
+    return 0; // Rating 0.0
   };
   
-  // Helper function to calculate Goodreads reviews score
+  // Helper function to calculate Goodreads reviews score based on the provided criteria
   const calculateGoodreadsReviewsScore = (reviewCount: number) => {
     if (!reviewCount) return 5; // Default value if no review count available
     
@@ -159,8 +155,8 @@ const Index = () => {
   
   // Helper function to calculate total score
   const calculateTotalScore = (scores: any) => {
-    const { price, publishYear, awards, relevance, condition, demand } = scores;
-    const total = (price + publishYear + awards + relevance + condition + demand) / 6;
+    const { price, publishYear, averageRating, goodreadsReviews } = scores;
+    const total = (price + publishYear + averageRating + goodreadsReviews) / 4;
     return parseFloat(total.toFixed(1));
   };
 
@@ -171,11 +167,6 @@ const Index = () => {
         const updatedBook = {
           ...book,
           scores: updatedScores,
-          // Update individual score properties
-          awards: updatedScores.awards,
-          relevance: updatedScores.relevance,
-          condition: updatedScores.condition,
-          demand: updatedScores.demand
         };
         // Recalculate total score
         updatedBook.totalScore = calculateTotalScore(updatedScores);

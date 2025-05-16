@@ -2,10 +2,8 @@
 export type CriteriaWeights = {
   price: number;
   publishYear: number;
-  awards: number;
-  relevance: number;
-  condition: number;
-  demand: number;
+  averageRating: number;
+  goodreadsReviews: number;
 };
 
 export type BookType = {
@@ -14,17 +12,11 @@ export type BookType = {
   author: string;
   publishYear: number;
   price: number;
-  awards: number;
-  relevance: number;
-  condition: number;
-  demand: number;
   scores: {
     price: number;
     publishYear: number;
-    awards: number;
-    relevance: number;
-    condition: number;
-    demand: number;
+    averageRating: number;
+    goodreadsReviews: number;
   };
   totalScore: number;
   date: Date;

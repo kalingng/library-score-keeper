@@ -14,16 +14,16 @@ const Slider = React.forwardRef<
   
   // Use Spectral-10 color scale (values from loading.io/color/feature/Spectral-10/)
   const spectral10Colors = [
-    "#5e4fa2", // Score 0-1: Blue
-    "#3288bd", // Score 1-2: Light blue
-    "#66c2a5", // Score 2-3: Teal
-    "#abdda4", // Score 3-4: Light green
-    "#e6f598", // Score 4-5: Yellow-green
-    "#fee08b", // Score 5-6: Light yellow
-    "#fdae61", // Score 6-7: Light orange
-    "#f46d43", // Score 7-8: Orange-red
+    "#5e4fa2", // Score 0: Blue (lowest)
+    "#3288bd", // Score 1: Light blue
+    "#66c2a5", // Score 2: Teal
+    "#abdda4", // Score 3: Light green
+    "#e6f598", // Score 4: Yellow-green
+    "#fee08b", // Score 5: Light yellow
+    "#fdae61", // Score 6: Light orange
+    "#f46d43", // Score 7: Orange-red
     "#d53e4f", // Score 8-9: Red
-    "#9e0142"  // Score 9-10: Dark red
+    "#9e0142"  // Score 10: Dark red (highest)
   ];
   
   // Calculate which color to use based on the value
