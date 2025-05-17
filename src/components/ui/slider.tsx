@@ -12,7 +12,7 @@ const Slider = React.forwardRef<
   const value = props.value?.[0] || 0;
   const max = props.max || 10;
   
-  // Updated color palette from the attached image (10 colors from grey to burgundy)
+  // Updated color palette from the attached image (10 colors from grey to red)
   const updatedColorPalette = [
     "#CCCCCC", // Score 0: Grey (lowest)
     "#3F7CAC", // Score 1: Blue

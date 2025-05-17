@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -260,7 +261,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F2FCE2] to-white">
+    <div className="min-h-screen">
       <div className="container mx-auto py-8 px-4">
         <header className="text-center mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-[#654321] mb-2">Book Acquisition Scoring Tool</h1>
@@ -279,11 +280,11 @@ const Index = () => {
             <TabsTrigger value="history" className="data-[state=active]:bg-white data-[state=active]:text-[#654321]">History</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search" className="p-6 bg-white rounded-lg shadow-md border border-[#E8F2D6]">
+          <TabsContent value="search" className="p-6 vintage-card vintage-border rounded-lg shadow-md">
             <BookSearch onSelectBook={handleBookSelected} />
           </TabsContent>
 
-          <TabsContent value="results" className="p-6 bg-white rounded-lg shadow-md border border-[#E8F2D6]">
+          <TabsContent value="results" className="p-6 vintage-card vintage-border rounded-lg shadow-md">
             <BookScoreResults 
               book={selectedFavouriteBook || selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
               onScoresUpdate={handleUpdateBookScores}
@@ -294,7 +295,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="favourites" className="p-6 bg-white rounded-lg shadow-md border border-[#E8F2D6]">
+          <TabsContent value="favourites" className="p-6 vintage-card vintage-border rounded-lg shadow-md">
             <BookFavourites 
               books={favouriteBooks} 
               onSelectBook={handleFavouriteBookSelected}
@@ -311,7 +312,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="history" className="p-6 bg-white rounded-lg shadow-md border border-[#E8F2D6]">
+          <TabsContent value="history" className="p-6 vintage-card vintage-border rounded-lg shadow-md">
             <BookHistory 
               books={scoredBooks} 
               onSelectBook={handleHistoryBookSelected}
@@ -320,7 +321,7 @@ const Index = () => {
           </TabsContent>
         </Tabs>
         
-        {/* Add navigation buttons at the bottom */}
+        {/* Navigation buttons at the bottom */}
         <div className="mt-6 max-w-4xl mx-auto">
           <Pagination>
             <PaginationContent>
@@ -331,7 +332,7 @@ const Index = () => {
                     e.preventDefault(); 
                     handlePrevious(); 
                   }}
-                  className="border border-[#C19A6B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
+                  className="border border-[#A67B5B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
                 />
               </PaginationItem>
               <PaginationItem>
@@ -341,7 +342,7 @@ const Index = () => {
                     e.preventDefault(); 
                     handleNext(); 
                   }}
-                  className="border border-[#C19A6B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
+                  className="border border-[#A67B5B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
                 />
               </PaginationItem>
             </PaginationContent>

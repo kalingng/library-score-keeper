@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,24 +48,24 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     );
   }
 
-  // Natural/wood tone color palette (10 colors from brown/grey to green)
-  const naturalColorPalette = [
+  // Color palette from the attached image (10 colors from grey to burgundy)
+  const spectralColorPalette = [
     "#CCCCCC", // Score 0: Grey (lowest)
-    "#A3A380", // Score 1: Sage
-    "#8E9B69", // Score 2: Moss
-    "#78866B", // Score 3: Camouflage Green
-    "#B4A582", // Score 4: Sand
-    "#D1BE9D", // Score 5: Tan
-    "#C19A6B", // Score 6: Camel
-    "#A67B5B", // Score 7: Light Brown
-    "#8B5A2B", // Score 8: Saddle Brown
-    "#654321"  // Score 9-10: Dark Brown (highest)
+    "#3F7CAC", // Score 1: Blue
+    "#65B2A9", // Score 2: Teal
+    "#8EC386", // Score 3: Green
+    "#B6CF71", // Score 4: Light Green
+    "#E0DC62", // Score 5: Yellow
+    "#F9D45B", // Score 6: Light Orange
+    "#F6B26A", // Score 7: Orange
+    "#E6866A", // Score 8: Light Red
+    "#9E1C47"  // Score 9-10: Burgundy (highest)
   ];
   
   const getSpectralColor = (score: number) => {
     // Calculate which color to use based on the value
     const colorIndex = Math.min(9, Math.floor((score / 10) * 10));
-    return naturalColorPalette[colorIndex];
+    return spectralColorPalette[colorIndex];
   };
   
   const getScoreBackgroundColor = (score: number) => {
@@ -160,7 +159,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1 bg-gradient-to-b from-[#F2FCE2] to-white border border-[#E8F2D6]">
+        <Card className="md:col-span-1 vintage-card vintage-border">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
               <div>
@@ -183,6 +182,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           <CardContent>
             <div className="flex flex-col items-center">
               <div className="relative w-32 h-32 flex items-center justify-center mb-4">
+                <div className="absolute w-32 h-32 rounded-full spectral-circle"></div>
                 <svg className="absolute w-32 h-32" viewBox="0 0 100 100">
                   <circle 
                     cx="50" 
@@ -205,7 +205,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   />
                 </svg>
                 <div 
-                  className="w-28 h-28 rounded-full flex items-center justify-center" 
+                  className="w-28 h-28 rounded-full flex items-center justify-center bg-white border-4 border-white" 
                   style={{ backgroundColor: getScoreBackgroundColor(book.totalScore) }}
                 >
                   <div className="text-center">
@@ -361,7 +361,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 md:col-span-2 bg-gradient-to-b from-[#FDE1D3] to-white border border-[#F9E0D2]">
+        <Card className="col-span-1 md:col-span-2 vintage-card vintage-border">
           <CardHeader className="pb-2">
             <CardTitle className="text-[#654321]">Book Details</CardTitle>
           </CardHeader>
