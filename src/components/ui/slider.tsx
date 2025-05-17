@@ -12,22 +12,22 @@ const Slider = React.forwardRef<
   const value = props.value?.[0] || 0;
   const max = props.max || 10;
   
-  // Updated color palette from grey to red (10 colors)
+  // Updated color palette from the attached image (10 colors from grey to burgundy)
   const updatedColorPalette = [
-    "#CCCCCC", // Score 1: Grey (lowest)
-    "#B5B9CF", // Score 2
-    "#9EA6CF", // Score 3
-    "#869ACF", // Score 4
-    "#6F8CCF", // Score 5
-    "#D4AD9C", // Score 6
-    "#D49C89", // Score 7
-    "#D38A77", // Score 8
-    "#D27964", // Score 9
-    "#9E1C47"  // Score 10: Red (highest)
+    "#CCCCCC", // Score 0: Grey (lowest)
+    "#3F7CAC", // Score 1: Blue
+    "#65B2A9", // Score 2: Teal
+    "#8EC386", // Score 3: Green
+    "#B6CF71", // Score 4: Light Green
+    "#E0DC62", // Score 5: Yellow
+    "#F9D45B", // Score 6: Light Orange
+    "#F6B26A", // Score 7: Orange
+    "#E6866A", // Score 8: Light Red
+    "#9E1C47"  // Score 9-10: Burgundy (highest)
   ];
   
   // Calculate which color to use based on the value
-  const colorIndex = Math.max(0, Math.min(9, Math.floor((value / max) * 10) - 1));
+  const colorIndex = Math.min(9, Math.floor((value / max) * 10));
   const color = updatedColorPalette[colorIndex];
 
   return (

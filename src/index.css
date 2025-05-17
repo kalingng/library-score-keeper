@@ -5,33 +5,33 @@
 
 @layer base {
   :root {
-    --background: 38 30% 94%;
-    --foreground: 30 20% 20%;
+    --background: 25 30% 94%;
+    --foreground: 30 50% 20%;
 
-    --card: 38 30% 98%;
-    --card-foreground: 30 20% 20%;
+    --card: 25 30% 98%;
+    --card-foreground: 30 50% 20%;
 
-    --popover: 38 30% 98%;
-    --popover-foreground: 30 20% 20%;
+    --popover: 25 30% 98%;
+    --popover-foreground: 30 50% 20%;
 
-    --primary: 15 40% 25%;
-    --primary-foreground: 38 30% 96%;
+    --primary: 15 40% 30%;
+    --primary-foreground: 25 30% 96%;
 
-    --secondary: 38 20% 88%;
-    --secondary-foreground: 15 40% 25%;
+    --secondary: 25 20% 92%;
+    --secondary-foreground: 15 40% 30%;
 
-    --muted: 38 20% 88%;
+    --muted: 25 20% 92%;
     --muted-foreground: 30 15% 40%;
 
-    --accent: 38 40% 92%;
-    --accent-foreground: 15 40% 25%;
+    --accent: 25 40% 96%;
+    --accent-foreground: 15 40% 30%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 38 30% 96%;
+    --destructive-foreground: 25 30% 96%;
 
-    --border: 30 15% 85%;
-    --input: 30 15% 85%;
-    --ring: 15 40% 25%;
+    --border: 30 15% 90%;
+    --input: 30 15% 90%;
+    --ring: 15 40% 30%;
 
     --radius: 0.5rem;
 
@@ -46,33 +46,33 @@
   }
 
   .dark {
-    --background: 20 30% 10%;
-    --foreground: 38 30% 92%;
+    --background: 20 40% 15%;
+    --foreground: 25 30% 96%;
 
-    --card: 20 30% 12%;
-    --card-foreground: 38 30% 92%;
+    --card: 20 40% 15%;
+    --card-foreground: 25 30% 96%;
 
-    --popover: 20 30% 12%;
-    --popover-foreground: 38 30% 92%;
+    --popover: 20 40% 15%;
+    --popover-foreground: 25 30% 96%;
 
-    --primary: 30 25% 60%;
-    --primary-foreground: 20 30% 12%;
+    --primary: 30 30% 70%;
+    --primary-foreground: 20 40% 15%;
 
-    --secondary: 20 25% 18%;
-    --secondary-foreground: 38 30% 92%;
+    --secondary: 20 30% 20%;
+    --secondary-foreground: 25 30% 96%;
 
-    --muted: 20 25% 18%;
-    --muted-foreground: 20 25% 60%;
+    --muted: 20 30% 20%;
+    --muted-foreground: 20 30% 70%;
 
-    --accent: 38 20% 18%;
-    --accent-foreground: 38 30% 92%;
+    --accent: 25 20% 20%;
+    --accent-foreground: 25 30% 96%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 38 30% 92%;
+    --destructive-foreground: 25 30% 96%;
 
-    --border: 20 25% 18%;
-    --input: 20 25% 18%;
-    --ring: 30 25% 60%;
+    --border: 20 30% 20%;
+    --input: 20 30% 20%;
+    --ring: 30 30% 70%;
     
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -92,83 +92,5 @@
 
   body {
     @apply bg-background text-foreground;
-    background-color: #452C1A; /* Dark brown background color */
-    background-image: url("/lovable-uploads/de0d9630-32c9-4fe4-ae2b-07b008bc7919.png");
-    background-repeat: repeat;
-    background-size: cover;
   }
-}
-
-/* Vintage paper texture for cards */
-.vintage-card {
-  position: relative;
-  background-image: 
-    linear-gradient(to right, rgba(255,255,255,0.1) 0%, rgba(255,245,235,0.3) 100%),
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d1be9d' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-}
-
-/* Add rainbow spectral gradient for just the score circle border */
-.spectral-circle {
-  background: conic-gradient(
-    #9E1C47 0%, 
-    #E6866A 12.5%, 
-    #F6B26A 25%, 
-    #F9D45B 37.5%, 
-    #E0DC62 50%, 
-    #B6CF71 62.5%, 
-    #8EC386 75%, 
-    #65B2A9 87.5%, 
-    #3F7CAC 100%
-  );
-}
-
-/* Add vintage scrollwork border */
-.vintage-border {
-  border: 1px solid rgba(165, 142, 109, 0.4);
-  box-shadow: 0 2px 8px rgba(149, 128, 98, 0.1);
-}
-
-/* Library theme page container */
-.library-container {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 2rem;
-  margin: 2rem auto;
-  max-width: 1400px;
-}
-
-/* Library title styling */
-.library-title {
-  font-family: 'Playfair Display', serif;
-  color: #452C1A;
-  text-align: center;
-  margin-bottom: 2rem;
-  font-weight: 700;
-  font-size: 2.5rem;
-  border-bottom: 2px solid #D4AF37;
-  padding-bottom: 1rem;
-}
-
-/* Book section container styling */
-.book-section {
-  border: 2px solid #D4AF37;
-  border-radius: 8px;
-  background-color: rgba(255, 255, 245, 0.9);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-/* Header styling for book sections */
-.book-section-header {
-  background-color: #FDF8EF;
-  border-bottom: 2px solid #D4AF37;
-  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
-  padding: 1rem;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  text-align: center;
 }
