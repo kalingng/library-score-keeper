@@ -98,7 +98,7 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out'
 			},
 			backgroundImage: {
-				'library-pattern': "url('/lovable-uploads/ead0f2e1-1089-46a8-8518-9a4d3909a921.png')"
+				'library-pattern': "url('/lovable-uploads/8c47967a-b837-40c6-b101-297fe36d942e.png')"
 			}
 		}
 	},
