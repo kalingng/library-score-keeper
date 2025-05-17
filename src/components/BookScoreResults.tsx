@@ -205,12 +205,26 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   />
                 </svg>
                 <div 
-                  className="w-28 h-28 rounded-full flex items-center justify-center bg-white border-4 border-white" 
-                  style={{ backgroundColor: getScoreBackgroundColor(book.totalScore) }}
+                  className="w-28 h-28 rounded-full flex items-center justify-center" 
+                  style={{ 
+                    background: `conic-gradient(
+                      #9E1C47 0%, 
+                      #E6866A 12.5%, 
+                      #F6B26A 25%, 
+                      #F9D45B 37.5%, 
+                      #E0DC62 50%, 
+                      #B6CF71 62.5%, 
+                      #8EC386 75%, 
+                      #65B2A9 87.5%, 
+                      #3F7CAC 100%
+                    )` 
+                  }}
                 >
-                  <div className="text-center">
-                    <span className="text-5xl font-bold">{book.totalScore}</span>
-                    <span className="text-sm font-medium block">out of 10</span>
+                  <div className="w-24 h-24 rounded-full flex items-center justify-center bg-white">
+                    <div className="text-center">
+                      <span className="text-5xl font-bold">{book.totalScore}</span>
+                      <span className="text-sm font-medium block">out of 10</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -231,7 +245,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               </div>
             </div>
 
-            {/* Criteria Scores with updated labels and natural theme */}
+            {/* Criteria Scores with spectral color palette */}
             <div className="space-y-4 mt-6">
               <h3 className="text-sm font-medium mb-2 text-[#654321]">Criteria Scores</h3>
               <div>

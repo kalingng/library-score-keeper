@@ -93,7 +93,7 @@
   body {
     @apply bg-background text-foreground;
     background-color: #452C1A; /* Dark brown background color */
-    background-image: url("/lovable-uploads/8c47967a-b837-40c6-b101-297fe36d942e.png");
+    background-image: url("/lovable-uploads/de0d9630-32c9-4fe4-ae2b-07b008bc7919.png");
     background-repeat: repeat;
     background-size: cover;
   }
@@ -150,4 +150,25 @@
   font-size: 2.5rem;
   border-bottom: 2px solid #D4AF37;
   padding-bottom: 1rem;
+}
+
+/* Book section container styling */
+.book-section {
+  border: 2px solid #D4AF37;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 245, 0.9);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Header styling for book sections */
+.book-section-header {
+  background-color: #FDF8EF;
+  border-bottom: 2px solid #D4AF37;
+  margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+  padding: 1rem;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  text-align: center;
 }

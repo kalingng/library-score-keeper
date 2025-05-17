@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -129,62 +128,64 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
   
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-blue-800">Book Search</h2>
-      </div>
-      
-      <form onSubmit={handleSearch} className="flex flex-col gap-4">
-        <div className="relative w-full">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-          <Input
-            type="text"
-            placeholder="Enter book title or keywords..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            disabled={isLoading || isScanningBarcode}
-          />
+      <div className="book-section">
+        <div className="book-section-header">
+          <h2 className="text-2xl font-bold text-[#654321]">Book Search</h2>
         </div>
         
-        <div className="flex justify-center gap-4">
-          <Button 
-            type="submit" 
-            disabled={isLoading || isScanningBarcode}
-            className="w-40"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Searching...
-              </>
-            ) : (
-              <>
-                <Search className="mr-2 h-4 w-4" />
-                Search
-              </>
-            )}
-          </Button>
-          <Button 
-            type="button" 
-            variant="outline"
-            onClick={handleBarcodeScanning}
-            disabled={isLoading || isScanningBarcode}
-            className="w-40"
-          >
-            {isScanningBarcode ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Scanning...
-              </>
-            ) : (
-              <>
-                <ScanBarcode className="mr-2 h-4 w-4" />
-                Scan Barcode
-              </>
-            )}
-          </Button>
-        </div>
-      </form>
+        <form onSubmit={handleSearch} className="flex flex-col gap-4">
+          <div className="relative w-full">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+            <Input
+              type="text"
+              placeholder="Enter book title or keywords..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              disabled={isLoading || isScanningBarcode}
+            />
+          </div>
+          
+          <div className="flex justify-center gap-4">
+            <Button 
+              type="submit" 
+              disabled={isLoading || isScanningBarcode}
+              className="w-40"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Searching...
+                </>
+              ) : (
+                <>
+                  <Search className="mr-2 h-4 w-4" />
+                  Search
+                </>
+              )}
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={handleBarcodeScanning}
+              disabled={isLoading || isScanningBarcode}
+              className="w-40"
+            >
+              {isScanningBarcode ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Scanning...
+                </>
+              ) : (
+                <>
+                  <ScanBarcode className="mr-2 h-4 w-4" />
+                  Scan Barcode
+                </>
+              )}
+            </Button>
+          </div>
+        </form>
+      </div>
       
       {searchResults.length > 0 && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
