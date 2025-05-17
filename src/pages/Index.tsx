@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -8,6 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookType, BookSearchResult } from '@/types/book';
 import { v4 as uuidv4 } from 'uuid';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
@@ -17,6 +23,43 @@ const Index = () => {
   const [selectedHistoryBook, setSelectedHistoryBook] = useState<BookType | null>(null);
   const [selectedFavouriteBook, setSelectedFavouriteBook] = useState<BookType | null>(null);
   const { toast } = useToast();
+
+  // Define navigation handling functions
+  const handlePrevious = () => {
+    switch (activeTab) {
+      case "search":
+        // Already at first tab, do nothing or wrap around to last
+        setActiveTab("history");
+        break;
+      case "results":
+        setActiveTab("search");
+        break;
+      case "favourites":
+        setActiveTab("results");
+        break;
+      case "history":
+        setActiveTab("favourites");
+        break;
+    }
+  };
+
+  const handleNext = () => {
+    switch (activeTab) {
+      case "search":
+        setActiveTab("results");
+        break;
+      case "results":
+        setActiveTab("favourites");
+        break;
+      case "favourites":
+        setActiveTab("history");
+        break;
+      case "history":
+        // Already at last tab, do nothing or wrap around to first
+        setActiveTab("search");
+        break;
+    }
+  };
 
   const handleBookScored = (book: BookType) => {
     setScoredBooks(prev => [...prev, book]);
@@ -276,6 +319,34 @@ const Index = () => {
             />
           </TabsContent>
         </Tabs>
+        
+        {/* Add navigation buttons at the bottom */}
+        <div className="mt-6 max-w-4xl mx-auto">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  href="#" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    handlePrevious(); 
+                  }}
+                  className="border border-[#C19A6B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext 
+                  href="#" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    handleNext(); 
+                  }}
+                  className="border border-[#C19A6B] text-[#654321] hover:bg-[#F2FCE2] hover:text-[#8B5A2B]"
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   );
