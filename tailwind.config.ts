@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,12 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				library: {
+					brown: '#452C1A',
+					cream: '#F5EFE6',
+					gold: '#D4AF37',
+					burgundy: '#9E1C47'
 				}
 			},
 			borderRadius: {
@@ -89,6 +96,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			backgroundImage: {
+				'library-pattern': "url('/lovable-uploads/ead0f2e1-1089-46a8-8518-9a4d3909a921.png')"
 			}
 		}
 	},
