@@ -65,6 +65,7 @@ export default {
 				},
 				library: {
 					brown: '#654321',
+					darkBrown: '#3E2723', // Added darker brown color
 					cream: '#F7F2EA',
 					gold: '#D4AF37',
 					burgundy: '#9E1C47',
@@ -73,7 +74,7 @@ export default {
 					paper: '#FFF8E1',
 					leather: '#A67B5B'
 				},
-				// Add the spectral palette colors
+				// Spectral palette colors
 				spectral: {
 					0: '#CCCCCC', // Grey (lowest)
 					1: '#E06666', // Pink-Red

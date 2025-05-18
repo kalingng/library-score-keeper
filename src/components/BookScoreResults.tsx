@@ -206,7 +206,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   style={{ backgroundColor: getSpectralColor(book.totalScore) }}
                 >
                   <div className="text-center">
-                    <span className="text-5xl font-bold text-white">{book.totalScore}</span>
+                    <span className="text-5xl font-bold text-white score-text-dark-brown">{book.totalScore}</span>
                     <span className="text-sm font-medium block text-white">out of 10</span>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               </div>
             </div>
 
-            {/* Criteria Scores with updated spectral theme */}
+            {/* Criteria Scores with adjustable sliders */}
             <div className="space-y-4 mt-6">
               <h3 className="text-sm font-medium mb-2 text-library-brown">Criteria Scores</h3>
               <div>
@@ -332,7 +332,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 />
               </div>
               
-              {/* Updated additional criteria with vintage styling */}
+              {/* Additional criteria section */}
               <div className="mt-8 space-y-2 pt-4 border-t border-library-tan/40">
                 <h3 className="text-sm font-medium text-library-brown">Additional Criteria</h3>
                 

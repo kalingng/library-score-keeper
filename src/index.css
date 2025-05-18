@@ -129,3 +129,7 @@
 .spectral-8 { color: #6D9EEB; } /* Blue */
 .spectral-9 { color: #9E1C47; } /* Burgundy */
 
+/* Added darker brown for overall score text */
+.score-text-dark-brown {
+  color: #3E2723; /* Darker brown for overall score */
+}
