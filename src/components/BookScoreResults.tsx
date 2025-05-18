@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { BookType } from '@/types/book';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -203,7 +202,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 </svg>
                 <div 
                   className="w-28 h-28 rounded-full flex items-center justify-center" 
-                  style={{ backgroundColor: getSpectralColor(book.totalScore) }}
+                  style={{ backgroundColor: "#6D9EEB" }} // Light blue color for the inner circle
                 >
                   <div className="text-center">
                     <span className="text-5xl font-bold text-library-brown">{book.totalScore}</span>
@@ -484,14 +483,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('price', value)} 
                 />
-                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
-                  <span>&lt;£2</span>
-                  <span>£2-8</span>
-                  <span>£8-17</span>
-                  <span>£17-23</span>
-                  <span>£23-29</span>
-                  <span>&gt;£29</span>
-                </div>
               </div>
               
               <div className="space-y-3">
@@ -506,14 +497,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('publishYear', value)} 
                 />
-                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
-                  <span>0-1 yrs</span>
-                  <span>1-4 yrs</span>
-                  <span>4-10 yrs</span>
-                  <span>10-14 yrs</span>
-                  <span>14-18 yrs</span>
-                  <span>&gt;18 yrs</span>
-                </div>
               </div>
               
               <div className="space-y-3">
@@ -528,14 +511,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('averageRating', value)} 
                 />
-                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
-                  <span>4.5-5.0</span>
-                  <span>4.0-4.4</span>
-                  <span>3.5-3.9</span>
-                  <span>2.5-3.4</span>
-                  <span>0.5-2.4</span>
-                  <span>0.0</span>
-                </div>
               </div>
               
               <div className="space-y-3">
@@ -550,14 +525,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   step={1} 
                   onValueChange={(value) => handleScoreChange('goodreadsReviews', value)} 
                 />
-                <div className="text-xs text-gray-500 grid grid-cols-6 w-full">
-                  <span>&gt;100k</span>
-                  <span>50k-100k</span>
-                  <span>10k-50k</span>
-                  <span>1k-10k</span>
-                  <span>11-1k</span>
-                  <span>&lt;10</span>
-                </div>
               </div>
             </div>
           )}

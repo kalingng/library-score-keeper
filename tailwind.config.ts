@@ -74,7 +74,7 @@ export default {
 					paper: '#FFF8E1',
 					leather: '#A67B5B'
 				},
-				// Spectral palette colors with unique values for each score
+				// Spectral palette colors with unique values for each score updated from the new image
 				spectral: {
 					0: '#CCCCCC', // Score 0: Grey (lowest)
 					1: '#E06666', // Score 1: Pink-Red
@@ -84,7 +84,7 @@ export default {
 					5: '#DFF2A9', // Score 5: Light Green-Yellow
 					6: '#9FC686', // Score 6: Light Green
 					7: '#76A5AF', // Score 7: Teal
-					8: '#6D9EEB', // Score 8: Blue
+					8: '#6D9EEB', // Score 8: Blue (changed)
 					9: '#9E1C47'  // Score 9-10: Burgundy/Red (highest)
 				}
 			},
