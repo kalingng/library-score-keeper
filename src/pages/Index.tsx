@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -262,7 +263,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       <div className="container mx-auto py-8 px-4">
-        <header className="text-center mb-10 vintage-paper p-6 rounded-lg shadow-sm">
+        <header className="text-center mb-10 vintage-paper p-6 rounded-lg shadow-sm border border-library-tan/40">
           <h1 className="text-3xl md:text-4xl font-bold text-library-brown mb-2">Book Acquisition Scoring Tool</h1>
           <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Evaluate books based on your criteria
@@ -279,11 +280,11 @@ const Index = () => {
             <TabsTrigger value="history" className="data-[state=active]:bg-white data-[state=active]:text-library-brown">History</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="search" className="vintage-paper p-6 rounded-lg shadow-sm">
+          <TabsContent value="search" className="vintage-paper p-6 rounded-lg shadow-sm border border-library-tan/40">
             <BookSearch onSelectBook={handleBookSelected} />
           </TabsContent>
 
-          <TabsContent value="results" className="vintage-paper p-6 rounded-lg shadow-sm">
+          <TabsContent value="results" className="vintage-paper p-6 rounded-lg shadow-sm border border-library-tan/40">
             <BookScoreResults 
               book={selectedFavouriteBook || selectedHistoryBook || (scoredBooks.length > 0 ? scoredBooks[scoredBooks.length - 1] : null)}
               onScoresUpdate={handleUpdateBookScores}
@@ -294,7 +295,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="favourites" className="vintage-paper p-6 rounded-lg shadow-sm">
+          <TabsContent value="favourites" className="vintage-paper p-6 rounded-lg shadow-sm border border-library-tan/40">
             <BookFavourites 
               books={favouriteBooks} 
               onSelectBook={handleFavouriteBookSelected}
@@ -311,7 +312,7 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="history" className="vintage-paper p-6 rounded-lg shadow-sm">
+          <TabsContent value="history" className="vintage-paper p-6 rounded-lg shadow-sm border border-library-tan/40">
             <BookHistory 
               books={scoredBooks} 
               onSelectBook={handleHistoryBookSelected}

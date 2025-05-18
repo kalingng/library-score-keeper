@@ -37,6 +37,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   useEffect(() => {
     if (book) {
       setOriginalScores({...book.scores});
+      setEditedScores({...book.scores}); // Set edited scores when book changes
     }
   }, [book?.id]);
 
@@ -82,10 +83,8 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   };
 
   const getRecommendationClass = (score: number) => {
-    if (score >= 8) return "bg-green-100 text-library-brown";
-    if (score >= 6) return "bg-blue-100 text-library-brown";
-    if (score >= 4) return "bg-yellow-100 text-library-brown";
-    return "bg-red-100 text-library-brown";
+    // Changed to dark blue text as requested
+    return "bg-blue-100 text-blue-900";
   };
 
   const getRatingStars = (rating: number) => {
@@ -225,6 +224,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   onClick={handleResetScores}
                 >
                   <Timer className="h-4 w-4 mr-2" /> Reset
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 border-library-wood text-library-brown hover:bg-library-cream hover:text-library-wood"
+                  onClick={() => setIsAdjustingScores(true)}
+                >
+                  <Edit className="h-4 w-4 mr-2" /> Adjust
                 </Button>
               </div>
             </div>

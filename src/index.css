@@ -92,9 +92,10 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image: url('/lovable-uploads/7e41acec-b173-4232-a387-589b2d74601a.png');
-    background-size: 200px;
+    background-image: url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png');
+    background-size: 400px;
     background-blend-mode: overlay;
+    background-color: rgba(60, 30, 20, 0.95);
   }
 }
 
@@ -127,3 +128,4 @@
 .spectral-7 { color: #76A5AF; } /* Teal */
 .spectral-8 { color: #6D9EEB; } /* Blue */
 .spectral-9 { color: #9E1C47; } /* Burgundy */
+
