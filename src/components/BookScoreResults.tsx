@@ -206,8 +206,8 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   style={{ backgroundColor: getSpectralColor(book.totalScore) }}
                 >
                   <div className="text-center">
-                    <span className="text-5xl font-bold text-white score-text-dark-brown">{book.totalScore}</span>
-                    <span className="text-sm font-medium block text-white">out of 10</span>
+                    <span className="text-5xl font-bold text-library-brown">{book.totalScore}</span>
+                    <span className="text-sm font-medium block text-library-brown">out of 10</span>
                   </div>
                 </div>
               </div>

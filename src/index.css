@@ -92,9 +92,9 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image: url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png');
+    background-image: url('/lovable-uploads/74961daf-7933-4260-96ee-8aacd1dab403.png');
     background-size: 400px;
-    background-blend-mode: overlay;
+    background-blend-mode: multiply;
     background-color: rgba(60, 30, 20, 0.95);
   }
 }
@@ -103,18 +103,27 @@
   background-color: rgba(235, 225, 210, 0.9);
   border: 1px solid rgba(165, 130, 95, 0.3);
   box-shadow: 0 2px 4px rgba(90, 60, 30, 0.1);
+  background-image: url('/lovable-uploads/7e41acec-b173-4232-a387-589b2d74601a.png');
+  background-size: 200px;
+  background-blend-mode: overlay;
 }
 
 .vintage-paper {
   background-color: rgba(250, 245, 235, 0.95);
   border: 1px solid rgba(210, 190, 160, 0.4);
   box-shadow: 0 1px 3px rgba(100, 70, 40, 0.1);
+  background-image: url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png');
+  background-size: 200px;
+  background-blend-mode: overlay;
 }
 
 .vintage-card {
   @apply bg-gradient-to-b from-[#F7F2EA] to-[#E8DFD0];
   border: 1px solid rgba(165, 130, 95, 0.3);
   box-shadow: 0 2px 4px rgba(90, 60, 30, 0.1);
+  background-image: url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png');
+  background-size: 200px;
+  background-blend-mode: overlay;
 }
 
 /* Natural/wood tone color palette (10 colors from grey to burgundy) */
@@ -129,7 +138,7 @@
 .spectral-8 { color: #6D9EEB; } /* Blue */
 .spectral-9 { color: #9E1C47; } /* Burgundy */
 
-/* Added darker brown for overall score text */
-.score-text-dark-brown {
-  color: #3E2723; /* Darker brown for overall score */
+/* Text color for score */
+.score-text-brown {
+  color: #654321; /* Same brown as other text */
 }
