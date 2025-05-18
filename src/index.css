@@ -5,83 +5,83 @@
 
 @layer base {
   :root {
-    --background: 25 30% 94%;
-    --foreground: 30 50% 20%;
+    --background: 30 30% 94%;
+    --foreground: 20 40% 20%;
 
-    --card: 25 30% 98%;
-    --card-foreground: 30 50% 20%;
+    --card: 30 20% 96%;
+    --card-foreground: 20 40% 20%;
 
-    --popover: 25 30% 98%;
-    --popover-foreground: 30 50% 20%;
+    --popover: 30 20% 96%;
+    --popover-foreground: 20 40% 20%;
 
-    --primary: 15 40% 30%;
-    --primary-foreground: 25 30% 96%;
+    --primary: 25 50% 25%;
+    --primary-foreground: 30 20% 96%;
 
-    --secondary: 25 20% 92%;
-    --secondary-foreground: 15 40% 30%;
+    --secondary: 30 15% 90%;
+    --secondary-foreground: 25 50% 25%;
 
-    --muted: 25 20% 92%;
-    --muted-foreground: 30 15% 40%;
+    --muted: 30 15% 90%;
+    --muted-foreground: 25 30% 40%;
 
-    --accent: 25 40% 96%;
-    --accent-foreground: 15 40% 30%;
+    --accent: 30 40% 94%;
+    --accent-foreground: 25 50% 25%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 25 30% 96%;
+    --destructive-foreground: 30 20% 96%;
 
-    --border: 30 15% 90%;
-    --input: 30 15% 90%;
-    --ring: 15 40% 30%;
+    --border: 25 20% 80%;
+    --input: 25 20% 80%;
+    --ring: 25 50% 25%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 30 20% 95%;
+    --sidebar-foreground: 25 40% 25%;
+    --sidebar-primary: 25 40% 25%;
+    --sidebar-primary-foreground: 30 20% 95%;
+    --sidebar-accent: 30 15% 90%;
+    --sidebar-accent-foreground: 25 40% 25%;
+    --sidebar-border: 25 20% 80%;
+    --sidebar-ring: 25 40% 25%;
   }
 
   .dark {
     --background: 20 40% 15%;
-    --foreground: 25 30% 96%;
+    --foreground: 30 20% 90%;
 
     --card: 20 40% 15%;
-    --card-foreground: 25 30% 96%;
+    --card-foreground: 30 20% 90%;
 
     --popover: 20 40% 15%;
-    --popover-foreground: 25 30% 96%;
+    --popover-foreground: 30 20% 90%;
 
-    --primary: 30 30% 70%;
+    --primary: 25 40% 60%;
     --primary-foreground: 20 40% 15%;
 
     --secondary: 20 30% 20%;
-    --secondary-foreground: 25 30% 96%;
+    --secondary-foreground: 30 20% 90%;
 
     --muted: 20 30% 20%;
-    --muted-foreground: 20 30% 70%;
+    --muted-foreground: 25 30% 60%;
 
-    --accent: 25 20% 20%;
-    --accent-foreground: 25 30% 96%;
+    --accent: 20 30% 20%;
+    --accent-foreground: 30 20% 90%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 25 30% 96%;
+    --destructive-foreground: 30 20% 90%;
 
-    --border: 20 30% 20%;
-    --input: 20 30% 20%;
-    --ring: 30 30% 70%;
+    --border: 20 30% 30%;
+    --input: 20 30% 30%;
+    --ring: 25 40% 60%;
     
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 20 40% 15%;
+    --sidebar-foreground: 30 20% 90%;
+    --sidebar-primary: 25 40% 60%;
+    --sidebar-primary-foreground: 20 40% 15%;
+    --sidebar-accent: 20 30% 20%;
+    --sidebar-accent-foreground: 30 20% 90%;
+    --sidebar-border: 20 30% 30%;
+    --sidebar-ring: 25 40% 60%;
   }
 }
 
@@ -92,5 +92,38 @@
 
   body {
     @apply bg-background text-foreground;
+    background-image: url('/lovable-uploads/7e41acec-b173-4232-a387-589b2d74601a.png');
+    background-size: 200px;
+    background-blend-mode: overlay;
   }
 }
+
+.vintage-wood {
+  background-color: rgba(235, 225, 210, 0.9);
+  border: 1px solid rgba(165, 130, 95, 0.3);
+  box-shadow: 0 2px 4px rgba(90, 60, 30, 0.1);
+}
+
+.vintage-paper {
+  background-color: rgba(250, 245, 235, 0.95);
+  border: 1px solid rgba(210, 190, 160, 0.4);
+  box-shadow: 0 1px 3px rgba(100, 70, 40, 0.1);
+}
+
+.vintage-card {
+  @apply bg-gradient-to-b from-[#F7F2EA] to-[#E8DFD0];
+  border: 1px solid rgba(165, 130, 95, 0.3);
+  box-shadow: 0 2px 4px rgba(90, 60, 30, 0.1);
+}
+
+/* Natural/wood tone color palette (10 colors from grey to burgundy) */
+.spectral-0 { color: #CCCCCC; } /* Grey */
+.spectral-1 { color: #E06666; } /* Pink-Red */
+.spectral-2 { color: #E67C43; } /* Orange-Red */
+.spectral-3 { color: #F1C232; } /* Orange-Yellow */
+.spectral-4 { color: #FFD966; } /* Yellow */
+.spectral-5 { color: #DFF2A9; } /* Light Green-Yellow */
+.spectral-6 { color: #9FC686; } /* Light Green */
+.spectral-7 { color: #76A5AF; } /* Teal */
+.spectral-8 { color: #6D9EEB; } /* Blue */
+.spectral-9 { color: #9E1C47; } /* Burgundy */

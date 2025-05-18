@@ -64,10 +64,27 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				library: {
-					brown: '#452C1A',
-					cream: '#F5EFE6',
+					brown: '#654321',
+					cream: '#F7F2EA',
 					gold: '#D4AF37',
-					burgundy: '#9E1C47'
+					burgundy: '#9E1C47',
+					wood: '#8B5A2B',
+					tan: '#D2B48C',
+					paper: '#FFF8E1',
+					leather: '#A67B5B'
+				},
+				// Add the spectral palette colors
+				spectral: {
+					0: '#CCCCCC', // Grey (lowest)
+					1: '#E06666', // Pink-Red
+					2: '#E67C43', // Orange-Red
+					3: '#F1C232', // Orange-Yellow
+					4: '#FFD966', // Yellow
+					5: '#DFF2A9', // Light Green-Yellow
+					6: '#9FC686', // Light Green
+					7: '#76A5AF', // Teal
+					8: '#6D9EEB', // Blue
+					9: '#9E1C47'  // Burgundy/Red (highest)
 				}
 			},
 			borderRadius: {
@@ -98,7 +115,7 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out'
 			},
 			backgroundImage: {
-				'library-pattern': "url('/lovable-uploads/ead0f2e1-1089-46a8-8518-9a4d3909a921.png')"
+				'library-pattern': "url('/lovable-uploads/7e41acec-b173-4232-a387-589b2d74601a.png')"
 			}
 		}
 	},

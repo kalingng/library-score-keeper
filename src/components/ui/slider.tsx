@@ -14,16 +14,16 @@ const Slider = React.forwardRef<
   
   // Updated color palette from the attached image (10 colors from grey to burgundy)
   const updatedColorPalette = [
-    "#CCCCCC", // Score 0: Grey (lowest)
-    "#3F7CAC", // Score 1: Blue
-    "#65B2A9", // Score 2: Teal
-    "#8EC386", // Score 3: Green
-    "#B6CF71", // Score 4: Light Green
-    "#E0DC62", // Score 5: Yellow
-    "#F9D45B", // Score 6: Light Orange
-    "#F6B26A", // Score 7: Orange
-    "#E6866A", // Score 8: Light Red
-    "#9E1C47"  // Score 9-10: Burgundy (highest)
+    "#CCCCCC", // Score 0-1: Grey (lowest)
+    "#E06666", // Score 2: Pink-Red
+    "#E67C43", // Score 3: Orange-Red
+    "#F1C232", // Score 4: Orange-Yellow
+    "#FFD966", // Score 5: Yellow
+    "#DFF2A9", // Score 6: Light Green-Yellow
+    "#9FC686", // Score 7: Light Green
+    "#76A5AF", // Score 8: Teal
+    "#6D9EEB", // Score 9: Blue
+    "#9E1C47"  // Score 10: Burgundy/Red (highest)
   ];
   
   // Calculate which color to use based on the value
