@@ -133,13 +133,13 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
         <h2 className="text-2xl font-bold text-library-brown">Book Search</h2>
       </div>
       
-      <form onSubmit={handleSearch} className="flex flex-col gap-4">
+      <form onSubmit={handleSearch} className="flex flex-col gap-4 bg-white/90 p-6 rounded-lg shadow-sm border border-library-tan/50">
         <div className="relative w-full">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-library-brown" />
           <Input
             type="text"
             placeholder="Enter book title or keywords..."
-            className="pl-8 border-library-tan bg-library-paper/80"
+            className="pl-8 border-library-tan bg-library-paper"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isLoading || isScanningBarcode}
@@ -191,14 +191,14 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
           {searchResults.map((book, index) => (
             <Card 
               key={index} 
-              className="vintage-card overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+              className="bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer border-library-tan/50"
               onClick={() => handleSelectBook(book)}
             >
-              <CardHeader className="bg-library-tan/30 pb-2">
+              <CardHeader className="bg-library-cream pb-2 border-b border-library-tan/30">
                 <CardTitle className="text-lg leading-tight line-clamp-2 text-library-darkBrown">{book.title}</CardTitle>
                 <p className="text-sm text-library-brown">by {book.author}</p>
               </CardHeader>
-              <CardContent className="pt-4 vintage-paper">
+              <CardContent className="pt-4 bg-white">
                 <div className="flex flex-col space-y-4">
                   {/* Book Cover Image */}
                   <div className="flex justify-center">
@@ -216,7 +216,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
                   </div>
 
                   {/* Book Details */}
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2 bg-library-cream/50 p-3 rounded-md">
                     <div className="text-sm font-medium text-library-darkBrown">Genre:</div>
                     <div className="text-sm text-library-brown">{book.category}</div>
                     
@@ -226,12 +226,12 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
                     <div className="text-sm font-medium text-library-darkBrown">Published:</div>
                     <div className="text-sm text-library-brown">{book.publishYear}</div>
                     
-                    <div className="text-sm font-medium text-library-darkBrown">Rating from Amazon:</div>
+                    <div className="text-sm font-medium text-library-darkBrown">Rating:</div>
                     <div className="text-amber-700 text-sm font-medium">
                       {getRatingStars(book.averageRating)} ({book.averageRating})
                     </div>
                     
-                    <div className="text-sm font-medium text-library-darkBrown">Number of reviews on Goodreads:</div>
+                    <div className="text-sm font-medium text-library-darkBrown">Reviews:</div>
                     <div className="text-sm font-medium text-library-burgundy">
                       {book.goodreadsReviews.toLocaleString()}
                     </div>
@@ -244,7 +244,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
       )}
       
       {searchResults.length === 0 && !isLoading && searchTerm.length > 0 && (
-        <div className="text-center py-10 vintage-paper rounded-lg">
+        <div className="text-center py-10 bg-white/90 rounded-lg shadow-sm border border-library-tan/30">
           <Book className="mx-auto h-12 w-12 text-library-tan" />
           <h3 className="mt-4 text-lg font-medium text-library-darkBrown">No books found</h3>
           <p className="text-library-brown">Try different keywords or broaden your search</p>
