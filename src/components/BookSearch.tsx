@@ -130,16 +130,16 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
   return (
     <div className="space-y-6">
       <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-blue-800">Book Search</h2>
+        <h2 className="text-2xl font-bold text-library-brown">Book Search</h2>
       </div>
       
       <form onSubmit={handleSearch} className="flex flex-col gap-4">
         <div className="relative w-full">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-library-brown" />
           <Input
             type="text"
             placeholder="Enter book title or keywords..."
-            className="pl-8"
+            className="pl-8 border-library-tan bg-library-paper/80"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isLoading || isScanningBarcode}
@@ -150,7 +150,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
           <Button 
             type="submit" 
             disabled={isLoading || isScanningBarcode}
-            className="w-40"
+            className="w-40 bg-library-brown hover:bg-library-darkBrown"
           >
             {isLoading ? (
               <>
@@ -169,7 +169,7 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
             variant="outline"
             onClick={handleBarcodeScanning}
             disabled={isLoading || isScanningBarcode}
-            className="w-40"
+            className="w-40 border-library-brown text-library-brown hover:bg-library-tan/50"
           >
             {isScanningBarcode ? (
               <>
@@ -191,14 +191,14 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
           {searchResults.map((book, index) => (
             <Card 
               key={index} 
-              className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              className="vintage-card overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
               onClick={() => handleSelectBook(book)}
             >
-              <CardHeader className="bg-blue-50 pb-2">
-                <CardTitle className="text-lg leading-tight line-clamp-2">{book.title}</CardTitle>
-                <p className="text-sm text-gray-600">by {book.author}</p>
+              <CardHeader className="bg-library-tan/30 pb-2">
+                <CardTitle className="text-lg leading-tight line-clamp-2 text-library-darkBrown">{book.title}</CardTitle>
+                <p className="text-sm text-library-brown">by {book.author}</p>
               </CardHeader>
-              <CardContent className="pt-4">
+              <CardContent className="pt-4 vintage-paper">
                 <div className="flex flex-col space-y-4">
                   {/* Book Cover Image */}
                   <div className="flex justify-center">
@@ -206,33 +206,33 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
                       <img 
                         src={book.imageUrl} 
                         alt={`Cover of ${book.title}`} 
-                        className="h-48 object-contain rounded-md shadow-sm"
+                        className="h-48 object-contain rounded-md shadow-md border border-library-tan/50"
                       />
                     ) : (
-                      <div className="h-48 w-32 bg-gray-100 flex items-center justify-center rounded-md">
-                        <Book className="h-12 w-12 text-gray-400" />
+                      <div className="h-48 w-32 bg-library-paper flex items-center justify-center rounded-md border border-library-tan/50">
+                        <Book className="h-12 w-12 text-library-brown/60" />
                       </div>
                     )}
                   </div>
 
                   {/* Book Details */}
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="text-sm font-medium text-gray-500">Genre:</div>
-                    <div className="text-sm">{book.category}</div>
+                    <div className="text-sm font-medium text-library-darkBrown">Genre:</div>
+                    <div className="text-sm text-library-brown">{book.category}</div>
                     
-                    <div className="text-sm font-medium text-gray-500">Price:</div>
-                    <div className="text-sm">${book.price.toFixed(2)}</div>
+                    <div className="text-sm font-medium text-library-darkBrown">Price:</div>
+                    <div className="text-sm text-library-brown">${book.price.toFixed(2)}</div>
                     
-                    <div className="text-sm font-medium text-gray-500">Published:</div>
-                    <div className="text-sm">{book.publishYear}</div>
+                    <div className="text-sm font-medium text-library-darkBrown">Published:</div>
+                    <div className="text-sm text-library-brown">{book.publishYear}</div>
                     
-                    <div className="text-sm font-medium text-gray-500">Rating from Amazon:</div>
-                    <div className="text-amber-500 text-sm font-medium">
+                    <div className="text-sm font-medium text-library-darkBrown">Rating from Amazon:</div>
+                    <div className="text-amber-700 text-sm font-medium">
                       {getRatingStars(book.averageRating)} ({book.averageRating})
                     </div>
                     
-                    <div className="text-sm font-medium text-gray-500">Number of reviews on Goodreads:</div>
-                    <div className="text-sm font-medium text-purple-600">
+                    <div className="text-sm font-medium text-library-darkBrown">Number of reviews on Goodreads:</div>
+                    <div className="text-sm font-medium text-library-burgundy">
                       {book.goodreadsReviews.toLocaleString()}
                     </div>
                   </div>
@@ -244,10 +244,10 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
       )}
       
       {searchResults.length === 0 && !isLoading && searchTerm.length > 0 && (
-        <div className="text-center py-10">
-          <Book className="mx-auto h-12 w-12 text-gray-300" />
-          <h3 className="mt-4 text-lg font-medium text-gray-600">No books found</h3>
-          <p className="text-gray-500">Try different keywords or broaden your search</p>
+        <div className="text-center py-10 vintage-paper rounded-lg">
+          <Book className="mx-auto h-12 w-12 text-library-tan" />
+          <h3 className="mt-4 text-lg font-medium text-library-darkBrown">No books found</h3>
+          <p className="text-library-brown">Try different keywords or broaden your search</p>
         </div>
       )}
     </div>
