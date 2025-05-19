@@ -118,7 +118,8 @@ export default {
 			backgroundImage: {
 				'library-pattern': "url('/lovable-uploads/7e41acec-b173-4232-a387-589b2d74601a.png')",
 				'vintage-books': "url('/lovable-uploads/74961daf-7933-4260-96ee-8aacd1dab403.png')",
-				'paper-texture': "url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png')"
+				'paper-texture': "url('/lovable-uploads/3a64a615-4c7f-4e2b-94a0-81f494bd575a.png')",
+				'book-pattern': "url('/lovable-uploads/d2d93f14-9a92-4c83-ba4f-4cb5032fb96d.png')"
 			}
 		}
 	},
