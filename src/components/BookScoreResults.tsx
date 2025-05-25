@@ -202,7 +202,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 </svg>
                 <div 
                   className="w-28 h-28 rounded-full flex items-center justify-center" 
-                  style={{ backgroundColor: "#6D9EEB" }} // Light blue color for the inner circle
+                  style={{ backgroundColor: "#E6F3FF" }} // Pale blue color for the inner circle
                 >
                   <div className="text-center">
                     <span className="text-5xl font-bold text-library-brown">{book.totalScore}</span>

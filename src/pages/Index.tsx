@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import BookScoreResults from '@/components/BookScoreResults';
 import BookHistory from '@/components/BookHistory';
@@ -15,6 +14,8 @@ import {
   PaginationNext, 
   PaginationPrevious 
 } from '@/components/ui/pagination';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Index = () => {
   const [scoredBooks, setScoredBooks] = useState<BookType[]>([]);
@@ -323,30 +324,22 @@ const Index = () => {
         
         {/* Add navigation buttons at the bottom */}
         <div className="mt-6 max-w-4xl mx-auto">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  href="#" 
-                  onClick={(e) => { 
-                    e.preventDefault(); 
-                    handlePrevious(); 
-                  }}
-                  className="border border-library-tan text-library-brown hover:bg-library-cream hover:text-library-wood"
-                />
-              </PaginationItem>
-              <PaginationItem>
-                <PaginationNext 
-                  href="#" 
-                  onClick={(e) => { 
-                    e.preventDefault(); 
-                    handleNext(); 
-                  }}
-                  className="border border-library-tan text-library-brown hover:bg-library-cream hover:text-library-wood"
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <div className="flex justify-center items-center gap-4">
+            <Button
+              onClick={handlePrevious}
+              className="bg-library-wood text-white hover:bg-library-wood/90 px-6 py-2 rounded-md flex items-center gap-2"
+            >
+              <ChevronLeft className="h-5 w-5" />
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              className="bg-library-wood text-white hover:bg-library-wood/90 px-6 py-2 rounded-md flex items-center gap-2"
+            >
+              Next
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
