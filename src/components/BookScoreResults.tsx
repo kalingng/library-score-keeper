@@ -33,14 +33,22 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
   const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
   const [currentScores, setCurrentScores] = useState<BookType['scores'] | null>(null);
+  const [totalScore, setTotalScore] = useState<number>(0);
 
   useEffect(() => {
     if (book) {
       setOriginalScores({...book.scores});
       setEditedScores({...book.scores});
       setCurrentScores({...book.scores});
+      calculateTotalScore(book.scores);
     }
   }, [book?.id]);
+
+  const calculateTotalScore = (scores: BookType['scores']) => {
+    const { price, publishYear, averageRating, goodreadsReviews } = scores;
+    const total = (price + publishYear + averageRating + goodreadsReviews) / 4;
+    setTotalScore(Number(total.toFixed(1)));
+  };
 
   if (!book) {
     return (
@@ -116,6 +124,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
         [criterion]: value[0]
       };
       setCurrentScores(updatedScores);
+      calculateTotalScore(updatedScores);
       
       if (onScoresUpdate) {
         onScoresUpdate(book.id, updatedScores);
@@ -142,6 +151,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     if (originalScores && onScoresUpdate) {
       onScoresUpdate(book.id, originalScores);
       setCurrentScores({...originalScores});
+      calculateTotalScore(originalScores);
       toast({
         title: "Scores reset",
         description: "The book's scores have been reset to original values"
@@ -205,26 +215,26 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                     cy="50" 
                     r="45" 
                     fill="none" 
-                    stroke={getSpectralColor(book.totalScore)} 
+                    stroke={getSpectralColor(totalScore)} 
                     strokeWidth="10" 
-                    strokeDasharray={`${book.totalScore * 28.27} 282.7`} 
+                    strokeDasharray={`${totalScore * 28.27} 282.7`} 
                     strokeDashoffset="0" 
                     transform="rotate(-90 50 50)" 
                   />
                 </svg>
                 <div 
                   className="w-28 h-28 rounded-full flex items-center justify-center" 
-                  style={{ backgroundColor: "#E6F3FF" }} // Pale blue color for the inner circle
+                  style={{ backgroundColor: "#E6F3FF" }}
                 >
                   <div className="text-center">
-                    <span className="text-5xl font-bold text-library-brown">{book.totalScore}</span>
+                    <span className="text-5xl font-bold text-library-brown">{totalScore}</span>
                     <span className="text-sm font-medium block text-library-brown">out of 10</span>
                   </div>
                 </div>
               </div>
               
-              <Badge className={`${getRecommendationClass(book.totalScore)} text-sm px-3 py-1`}>
-                {getRecommendation(book.totalScore)}
+              <Badge className={`${getRecommendationClass(totalScore)} text-sm px-3 py-1`}>
+                {getRecommendation(totalScore)}
               </Badge>
 
               <div className="flex gap-2 mt-4 w-full">
