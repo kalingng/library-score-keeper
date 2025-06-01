@@ -84,16 +84,24 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     return "rgba(247, 242, 234, 0.8)";
   };
 
+  // Updated recommendation logic with new labels
   const getRecommendation = (score: number) => {
-    if (score >= 8) return "Highly Recommended";
-    if (score >= 6) return "Recommended";
-    if (score >= 4) return "Consider";
-    return "Not Recommended";
+    if (score >= 9) return "Must buy!!";
+    if (score >= 8) return "Should buy!";
+    if (score >= 7) return "Nice to have";
+    if (score >= 5) return "May consider";
+    if (score >= 3) return "Optional";
+    return "Not necessary";
   };
 
+  // Updated badge style for more obvious recommendation
   const getRecommendationClass = (score: number) => {
-    // Changed to dark blue text as requested
-    return "bg-blue-100 text-blue-900";
+    if (score >= 9) return "bg-green-700 text-white text-lg font-extrabold px-6 py-3 shadow-lg animate-pulse";
+    if (score >= 8) return "bg-green-500 text-white text-lg font-bold px-5 py-2 shadow-md";
+    if (score >= 7) return "bg-blue-400 text-white text-base font-semibold px-4 py-2";
+    if (score >= 5) return "bg-yellow-400 text-gray-900 text-base font-semibold px-4 py-2";
+    if (score >= 3) return "bg-orange-300 text-gray-900 text-base font-semibold px-4 py-2";
+    return "bg-gray-400 text-white text-base font-semibold px-4 py-2";
   };
 
   const getRatingStars = (rating: number) => {
@@ -233,9 +241,12 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 </div>
               </div>
               
-              <Badge className={`${getRecommendationClass(totalScore)} text-sm px-3 py-1`}>
-                {getRecommendation(totalScore)}
-              </Badge>
+              <div className="flex flex-col items-center mt-2">
+                <span className="uppercase tracking-wider text-xs text-library-wood font-bold mb-1">Recommendation</span>
+                <Badge className={getRecommendationClass(totalScore)}>
+                  {getRecommendation(totalScore)}
+                </Badge>
+              </div>
 
               <div className="flex gap-2 mt-4 w-full">
                 <Button
