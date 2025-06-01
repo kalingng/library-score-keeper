@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { BookSearchResult } from "@/types/book";
 import { searchAmazonBooks } from "@/utils/amazonApi";
 import { useIsMobile } from '@/hooks/use-mobile';
+import { BarcodeScanner } from './BarcodeScanner';
 
 interface BookSearchProps {
   onSelectBook?: (book: BookSearchResult) => void;
@@ -56,24 +56,9 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
     }
   };
 
-  const handleBarcodeScanning = () => {
-    setIsScanningBarcode(true);
-    
-    // In a real implementation, this would access the device camera
-    // and use a barcode scanning library
-    toast({
-      title: "Scanning barcode",
-      description: "Please position the barcode in the center of the camera view"
-    });
-    
-    // Simulate a barcode scan after 2 seconds
-    setTimeout(() => {
-      // This is where you'd implement actual barcode scanning logic
-      // For now we'll just simulate finding a book with a specific ISBN
-      setSearchTerm("9781234567897");
-      handleSearchByBarcode("9781234567897");
-      setIsScanningBarcode(false);
-    }, 2000);
+  const handleBarcodeScan = (isbn: string) => {
+    setSearchTerm(isbn);
+    handleSearchByBarcode(isbn);
   };
   
   const handleSearchByBarcode = async (isbn: string) => {
@@ -167,87 +152,62 @@ const BookSearch = ({ onSelectBook }: BookSearchProps) => {
           <Button 
             type="button" 
             variant="outline"
-            onClick={handleBarcodeScanning}
+            onClick={() => setIsScanningBarcode(true)}
             disabled={isLoading || isScanningBarcode}
             className="w-40 border-library-brown text-library-brown hover:bg-library-tan/50"
           >
-            {isScanningBarcode ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Scanning...
-              </>
-            ) : (
-              <>
-                <ScanBarcode className="mr-2 h-4 w-4" />
-                Scan Barcode
-              </>
-            )}
+            <ScanBarcode className="mr-2 h-4 w-4" />
+            Scan Barcode
           </Button>
         </div>
       </form>
+
+      <BarcodeScanner
+        isOpen={isScanningBarcode}
+        onClose={() => setIsScanningBarcode(false)}
+        onScan={handleBarcodeScan}
+      />
       
       {searchResults.length > 0 && (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4">
           {searchResults.map((book, index) => (
             <Card 
-              key={index} 
-              className="bg-white shadow-md hover:shadow-lg transition-shadow cursor-pointer border-library-tan/50"
+              key={index}
+              className="cursor-pointer hover:bg-library-tan/10 transition-colors"
               onClick={() => handleSelectBook(book)}
             >
-              <CardHeader className="bg-library-cream pb-2 border-b border-library-tan/30">
-                <CardTitle className="text-lg leading-tight line-clamp-2 text-library-darkBrown">{book.title}</CardTitle>
-                <p className="text-sm text-library-brown">by {book.author}</p>
-              </CardHeader>
-              <CardContent className="pt-4 bg-white">
-                <div className="flex flex-col space-y-4">
-                  {/* Book Cover Image */}
-                  <div className="flex justify-center">
+              <CardContent className="p-4">
+                <div className="flex gap-4">
+                  <div className="w-20 h-28 bg-library-tan/20 rounded flex items-center justify-center">
                     {book.imageUrl ? (
                       <img 
                         src={book.imageUrl} 
-                        alt={`Cover of ${book.title}`} 
-                        className="h-48 object-contain rounded-md shadow-md border border-library-tan/50"
+                        alt={book.title}
+                        className="w-full h-full object-contain"
                       />
                     ) : (
-                      <div className="h-48 w-32 bg-library-paper flex items-center justify-center rounded-md border border-library-tan/50">
-                        <Book className="h-12 w-12 text-library-brown/60" />
-                      </div>
+                      <Book className="w-8 h-8 text-library-brown" />
                     )}
                   </div>
-
-                  {/* Book Details */}
-                  <div className="grid grid-cols-2 gap-2 bg-library-cream/50 p-3 rounded-md">
-                    <div className="text-sm font-medium text-library-darkBrown">Genre:</div>
-                    <div className="text-sm text-library-brown">{book.category}</div>
-                    
-                    <div className="text-sm font-medium text-library-darkBrown">Price:</div>
-                    <div className="text-sm text-library-brown">${book.price.toFixed(2)}</div>
-                    
-                    <div className="text-sm font-medium text-library-darkBrown">Published:</div>
-                    <div className="text-sm text-library-brown">{book.publishYear}</div>
-                    
-                    <div className="text-sm font-medium text-library-darkBrown">Rating:</div>
-                    <div className="text-amber-700 text-sm font-medium">
-                      {getRatingStars(book.averageRating)} ({book.averageRating})
-                    </div>
-                    
-                    <div className="text-sm font-medium text-library-darkBrown">Reviews:</div>
-                    <div className="text-sm font-medium text-library-burgundy">
-                      {book.goodreadsReviews.toLocaleString()}
+                  <div className="flex-1">
+                    <h3 className="font-medium text-library-brown">{book.title}</h3>
+                    <p className="text-sm text-gray-600">{book.author}</p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-sm text-gray-600">{book.publishYear}</span>
+                      <span className="text-sm text-gray-600">•</span>
+                      <span className="text-sm text-gray-600">${book.price.toFixed(2)}</span>
+                      {book.averageRating > 0 && (
+                        <>
+                          <span className="text-sm text-gray-600">•</span>
+                          <span className="text-sm text-yellow-600">{getRatingStars(book.averageRating)}</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
           ))}
-        </div>
-      )}
-      
-      {searchResults.length === 0 && !isLoading && searchTerm.length > 0 && (
-        <div className="text-center py-10 bg-white/90 rounded-lg shadow-sm border border-library-tan/30">
-          <Book className="mx-auto h-12 w-12 text-library-tan" />
-          <h3 className="mt-4 text-lg font-medium text-library-darkBrown">No books found</h3>
-          <p className="text-library-brown">Try different keywords or broaden your search</p>
         </div>
       )}
     </div>
