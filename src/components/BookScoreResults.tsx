@@ -257,6 +257,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                         price: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
+                      toast({
+                        title: "Score updated",
+                        description: "The price score has been adjusted"
+                      });
                     }
                   }}
                 />
@@ -280,6 +284,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                         publishYear: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
+                      toast({
+                        title: "Score updated",
+                        description: "The publish year score has been adjusted"
+                      });
                     }
                   }}
                 />
@@ -303,6 +311,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                         averageRating: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
+                      toast({
+                        title: "Score updated",
+                        description: "The rating score has been adjusted"
+                      });
                     }
                   }}
                 />
@@ -326,6 +338,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                         goodreadsReviews: value[0]
                       };
                       onScoresUpdate(book.id, updatedScores);
+                      toast({
+                        title: "Score updated",
+                        description: "The popularity score has been adjusted"
+                      });
                     }
                   }}
                 />
