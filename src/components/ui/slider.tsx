@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as SliderPrimitive from "@radix-ui/react-slider"
 
@@ -23,11 +22,12 @@ const Slider = React.forwardRef<
     "#9FC686", // Score 6: Light Green
     "#76A5AF", // Score 7: Teal
     "#6D9EEB", // Score 8: Blue
-    "#9E1C47"  // Score 9-10: Burgundy/Red (highest)
+    "#4B0082", // Score 9: Indigo
+    "#9E1C47"  // Score 10: Burgundy/Red (highest)
   ];
   
   // Calculate which color to use based on the value
-  const colorIndex = Math.min(9, Math.floor((value / max) * 10));
+  const colorIndex = Math.min(10, Math.floor((value / max) * 11));
   const color = updatedColorPalette[colorIndex];
 
   return (
