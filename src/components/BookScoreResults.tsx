@@ -32,11 +32,13 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   const [isAdjustingScores, setIsAdjustingScores] = useState(false);
   const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
   const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
+  const [currentScores, setCurrentScores] = useState<BookType['scores'] | null>(null);
 
   useEffect(() => {
     if (book) {
       setOriginalScores({...book.scores});
-      setEditedScores({...book.scores}); // Set edited scores when book changes
+      setEditedScores({...book.scores});
+      setCurrentScores({...book.scores});
     }
   }, [book?.id]);
 
@@ -108,17 +110,26 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   };
 
   const handleScoreChange = (criterion: keyof BookType['scores'], value: number[]) => {
-    if (editedScores) {
-      setEditedScores({
-        ...editedScores,
+    if (currentScores) {
+      const updatedScores = {
+        ...currentScores,
         [criterion]: value[0]
-      });
+      };
+      setCurrentScores(updatedScores);
+      
+      if (onScoresUpdate) {
+        onScoresUpdate(book.id, updatedScores);
+        toast({
+          title: "Score updated",
+          description: `The ${criterion} score has been adjusted`
+        });
+      }
     }
   };
 
   const handleSaveScores = () => {
-    if (editedScores && onScoresUpdate) {
-      onScoresUpdate(book.id, editedScores);
+    if (currentScores && onScoresUpdate) {
+      onScoresUpdate(book.id, currentScores);
       setIsAdjustingScores(false);
       toast({
         title: "Scores updated",
@@ -130,6 +141,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   const handleResetScores = () => {
     if (originalScores && onScoresUpdate) {
       onScoresUpdate(book.id, originalScores);
+      setCurrentScores({...originalScores});
       toast({
         title: "Scores reset",
         description: "The book's scores have been reset to original values"
@@ -242,108 +254,60 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-library-brown">How Affordable</span>
-                  <span className="text-xs font-medium">{book.scores.price}/10</span>
+                  <span className="text-xs font-medium">{currentScores?.price || book.scores.price}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.price]} 
+                  value={[currentScores?.price || book.scores.price]} 
                   min={0} 
                   max={10} 
                   step={1} 
                   className="h-2"
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        price: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                      toast({
-                        title: "Score updated",
-                        description: "The price score has been adjusted"
-                      });
-                    }
-                  }}
+                  onValueChange={(value) => handleScoreChange('price', value)}
                 />
               </div>
               
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-library-brown">How New</span>
-                  <span className="text-xs font-medium">{book.scores.publishYear}/10</span>
+                  <span className="text-xs font-medium">{currentScores?.publishYear || book.scores.publishYear}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.publishYear]} 
+                  value={[currentScores?.publishYear || book.scores.publishYear]} 
                   min={0} 
                   max={10} 
                   step={1} 
                   className="h-2" 
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        publishYear: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                      toast({
-                        title: "Score updated",
-                        description: "The publish year score has been adjusted"
-                      });
-                    }
-                  }}
+                  onValueChange={(value) => handleScoreChange('publishYear', value)}
                 />
               </div>
               
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-library-brown">How Good</span>
-                  <span className="text-xs font-medium">{book.scores.averageRating}/10</span>
+                  <span className="text-xs font-medium">{currentScores?.averageRating || book.scores.averageRating}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.averageRating]} 
+                  value={[currentScores?.averageRating || book.scores.averageRating]} 
                   min={0} 
                   max={10} 
                   step={1} 
                   className="h-2"
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        averageRating: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                      toast({
-                        title: "Score updated",
-                        description: "The rating score has been adjusted"
-                      });
-                    }
-                  }}
+                  onValueChange={(value) => handleScoreChange('averageRating', value)}
                 />
               </div>
               
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-library-brown">How Popular</span>
-                  <span className="text-xs font-medium">{book.scores.goodreadsReviews}/10</span>
+                  <span className="text-xs font-medium">{currentScores?.goodreadsReviews || book.scores.goodreadsReviews}/10</span>
                 </div>
                 <Slider 
-                  value={[book.scores.goodreadsReviews]} 
+                  value={[currentScores?.goodreadsReviews || book.scores.goodreadsReviews]} 
                   min={0} 
                   max={10} 
                   step={1} 
                   className="h-2"
-                  onValueChange={(value) => {
-                    if (onScoresUpdate) {
-                      const updatedScores = {
-                        ...book.scores,
-                        goodreadsReviews: value[0]
-                      };
-                      onScoresUpdate(book.id, updatedScores);
-                      toast({
-                        title: "Score updated",
-                        description: "The popularity score has been adjusted"
-                      });
-                    }
-                  }}
+                  onValueChange={(value) => handleScoreChange('goodreadsReviews', value)}
                 />
               </div>
               
@@ -485,15 +449,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
             </DialogDescription>
           </DialogHeader>
           
-          {editedScores && (
+          {currentScores && (
             <div className="space-y-6 py-4">
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>How Affordable</span>
-                  <span>{editedScores.price}/10</span>
+                  <span>{currentScores.price}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.price]} 
+                  value={[currentScores.price]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -504,10 +468,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>How New</span>
-                  <span>{editedScores.publishYear}/10</span>
+                  <span>{currentScores.publishYear}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.publishYear]} 
+                  value={[currentScores.publishYear]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -518,10 +482,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>How Good</span>
-                  <span>{editedScores.averageRating}/10</span>
+                  <span>{currentScores.averageRating}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.averageRating]} 
+                  value={[currentScores.averageRating]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -532,10 +496,10 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               <div className="space-y-3">
                 <Label className="flex justify-between">
                   <span>How Popular</span>
-                  <span>{editedScores.goodreadsReviews}/10</span>
+                  <span>{currentScores.goodreadsReviews}/10</span>
                 </Label>
                 <Slider 
-                  value={[editedScores.goodreadsReviews]} 
+                  value={[currentScores.goodreadsReviews]} 
                   min={0} 
                   max={10} 
                   step={1} 
@@ -556,11 +520,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
             <Button 
               variant="outline" 
               className="mr-2"
-              onClick={() => {
-                if (originalScores) {
-                  setEditedScores({...originalScores});
-                }
-              }}
+              onClick={handleResetScores}
             >
               <Timer className="h-4 w-4 mr-2" /> Reset
             </Button>
