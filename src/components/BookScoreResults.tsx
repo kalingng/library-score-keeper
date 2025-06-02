@@ -5,15 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
-import { Trophy, Star, BookOpen, Book, Edit, Timer, CircleMinus, Heart } from 'lucide-react';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogDescription,
-  DialogFooter
-} from '@/components/ui/dialog';
+import { Trophy, Star, BookOpen, Book, Timer, Heart } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -28,17 +20,13 @@ type BookScoreResultsProps = {
 const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourited = false }: BookScoreResultsProps) => {
   const { toast } = useToast();
   const isMobile = useIsMobile();
-  const [showDetails, setShowDetails] = useState(false);
-  const [isAdjustingScores, setIsAdjustingScores] = useState(false);
-  const [editedScores, setEditedScores] = useState<BookType['scores'] | null>(null);
-  const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
   const [currentScores, setCurrentScores] = useState<BookType['scores'] | null>(null);
+  const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
   const [totalScore, setTotalScore] = useState<number>(0);
 
   useEffect(() => {
     if (book) {
       setOriginalScores({...book.scores});
-      setEditedScores({...book.scores});
       setCurrentScores({...book.scores});
       calculateTotalScore(book.scores);
     }
@@ -144,17 +132,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     }
   };
 
-  const handleSaveScores = () => {
-    if (currentScores && onScoresUpdate) {
-      onScoresUpdate(book.id, currentScores);
-      setIsAdjustingScores(false);
-      toast({
-        title: "Scores updated",
-        description: "The book's scores have been adjusted successfully"
-      });
-    }
-  };
-  
   const handleResetScores = () => {
     if (originalScores && onScoresUpdate) {
       onScoresUpdate(book.id, originalScores);
@@ -164,10 +141,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
         title: "Scores reset",
         description: "The book's scores have been reset to original values"
       });
-      
-      if (isAdjustingScores) {
-        setEditedScores({...originalScores});
-      }
     }
   };
   
@@ -256,15 +229,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   onClick={handleResetScores}
                 >
                   <Timer className="h-4 w-4 mr-2" /> Reset
-                </Button>
-                
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex-1 border-library-wood text-library-brown hover:bg-library-cream hover:text-library-wood"
-                  onClick={() => setIsAdjustingScores(true)}
-                >
-                  <Edit className="h-4 w-4 mr-2" /> Adjust
                 </Button>
               </div>
             </div>
@@ -459,96 +423,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           </CardContent>
         </Card>
       </div>
-
-      {/* Score Adjustment Dialog */}
-      <Dialog open={isAdjustingScores} onOpenChange={setIsAdjustingScores}>
-        <DialogContent className="max-w-md vintage-paper">
-          <DialogHeader>
-            <DialogTitle className="text-library-brown">Adjust Scores Manually</DialogTitle>
-            <DialogDescription>
-              Move the sliders to adjust the individual scores for this book
-            </DialogDescription>
-          </DialogHeader>
-          
-          {currentScores && (
-            <div className="space-y-6 py-4">
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>How Affordable</span>
-                  <span>{currentScores.price}/10</span>
-                </Label>
-                <Slider 
-                  value={[currentScores.price]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('price', value)} 
-                />
-              </div>
-              
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>How New</span>
-                  <span>{currentScores.publishYear}/10</span>
-                </Label>
-                <Slider 
-                  value={[currentScores.publishYear]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('publishYear', value)} 
-                />
-              </div>
-              
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>How Good</span>
-                  <span>{currentScores.averageRating}/10</span>
-                </Label>
-                <Slider 
-                  value={[currentScores.averageRating]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('averageRating', value)} 
-                />
-              </div>
-              
-              <div className="space-y-3">
-                <Label className="flex justify-between">
-                  <span>How Popular</span>
-                  <span>{currentScores.goodreadsReviews}/10</span>
-                </Label>
-                <Slider 
-                  value={[currentScores.goodreadsReviews]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  onValueChange={(value) => handleScoreChange('goodreadsReviews', value)} 
-                />
-              </div>
-            </div>
-          )}
-          
-          <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={() => setIsAdjustingScores(false)}
-              className="flex items-center"
-            >
-              Cancel
-            </Button>
-            <Button 
-              variant="outline" 
-              className="mr-2"
-              onClick={handleResetScores}
-            >
-              <Timer className="h-4 w-4 mr-2" /> Reset
-            </Button>
-            <Button onClick={handleSaveScores}>Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
