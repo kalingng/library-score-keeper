@@ -113,25 +113,6 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     return stars.join('');
   };
 
-  const handleScoreChange = (criterion: keyof BookType['scores'], value: number[]) => {
-    if (currentScores) {
-      const updatedScores = {
-        ...currentScores,
-        [criterion]: value[0]
-      };
-      setCurrentScores(updatedScores);
-      calculateTotalScore(updatedScores);
-      
-      if (onScoresUpdate) {
-        onScoresUpdate(book.id, updatedScores);
-        toast({
-          title: "Score updated",
-          description: `The ${criterion} score has been adjusted`
-        });
-      }
-    }
-  };
-
   const handleResetScores = () => {
     if (originalScores && onScoresUpdate) {
       onScoresUpdate(book.id, originalScores);
@@ -233,7 +214,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
               </div>
             </div>
 
-            {/* Criteria Scores with adjustable sliders */}
+            {/* Criteria Scores display */}
             <div className="space-y-4 mt-6">
               <h3 className="text-sm font-medium mb-2 text-library-brown">Criteria Scores</h3>
               <div>
@@ -241,14 +222,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   <span className="text-xs text-library-brown">How Affordable</span>
                   <span className="text-xs font-medium">{currentScores?.price || book.scores.price}/10</span>
                 </div>
-                <Slider 
-                  value={[currentScores?.price || book.scores.price]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2"
-                  onValueChange={(value) => handleScoreChange('price', value)}
-                />
+                <div className="h-2 bg-library-cream rounded-full">
+                  <div 
+                    className="h-full rounded-full" 
+                    style={{ 
+                      width: `${(currentScores?.price || book.scores.price) * 10}%`,
+                      backgroundColor: getSpectralColor(currentScores?.price || book.scores.price)
+                    }}
+                  />
+                </div>
               </div>
               
               <div>
@@ -256,14 +238,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   <span className="text-xs text-library-brown">How New</span>
                   <span className="text-xs font-medium">{currentScores?.publishYear || book.scores.publishYear}/10</span>
                 </div>
-                <Slider 
-                  value={[currentScores?.publishYear || book.scores.publishYear]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2" 
-                  onValueChange={(value) => handleScoreChange('publishYear', value)}
-                />
+                <div className="h-2 bg-library-cream rounded-full">
+                  <div 
+                    className="h-full rounded-full" 
+                    style={{ 
+                      width: `${(currentScores?.publishYear || book.scores.publishYear) * 10}%`,
+                      backgroundColor: getSpectralColor(currentScores?.publishYear || book.scores.publishYear)
+                    }}
+                  />
+                </div>
               </div>
               
               <div>
@@ -271,14 +254,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   <span className="text-xs text-library-brown">How Good</span>
                   <span className="text-xs font-medium">{currentScores?.averageRating || book.scores.averageRating}/10</span>
                 </div>
-                <Slider 
-                  value={[currentScores?.averageRating || book.scores.averageRating]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2"
-                  onValueChange={(value) => handleScoreChange('averageRating', value)}
-                />
+                <div className="h-2 bg-library-cream rounded-full">
+                  <div 
+                    className="h-full rounded-full" 
+                    style={{ 
+                      width: `${(currentScores?.averageRating || book.scores.averageRating) * 10}%`,
+                      backgroundColor: getSpectralColor(currentScores?.averageRating || book.scores.averageRating)
+                    }}
+                  />
+                </div>
               </div>
               
               <div>
@@ -286,14 +270,15 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                   <span className="text-xs text-library-brown">How Popular</span>
                   <span className="text-xs font-medium">{currentScores?.goodreadsReviews || book.scores.goodreadsReviews}/10</span>
                 </div>
-                <Slider 
-                  value={[currentScores?.goodreadsReviews || book.scores.goodreadsReviews]} 
-                  min={0} 
-                  max={10} 
-                  step={1} 
-                  className="h-2"
-                  onValueChange={(value) => handleScoreChange('goodreadsReviews', value)}
-                />
+                <div className="h-2 bg-library-cream rounded-full">
+                  <div 
+                    className="h-full rounded-full" 
+                    style={{ 
+                      width: `${(currentScores?.goodreadsReviews || book.scores.goodreadsReviews) * 10}%`,
+                      backgroundColor: getSpectralColor(currentScores?.goodreadsReviews || book.scores.goodreadsReviews)
+                    }}
+                  />
+                </div>
               </div>
               
               {/* Additional criteria section */}
