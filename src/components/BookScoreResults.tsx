@@ -159,7 +159,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1 vintage-card">
+        <Card className="md:col-span-1 bg-library-cream/30">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
               <div>
@@ -205,7 +205,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 </svg>
                 <div 
                   className="w-28 h-28 rounded-full flex items-center justify-center" 
-                  style={{ backgroundColor: "#E6F3FF" }}
+                  style={{ backgroundColor: "#F7F2EA" }}
                 >
                   <div className="text-center">
                     <span className="text-5xl font-bold text-library-brown">{totalScore}</span>
@@ -331,7 +331,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 md:col-span-2 vintage-card">
+        <Card className="col-span-1 md:col-span-2 bg-library-cream/30">
           <CardHeader className="pb-2">
             <CardTitle className="text-library-brown">Book Details</CardTitle>
           </CardHeader>
@@ -346,7 +346,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                     className="h-64 object-contain rounded-md shadow-sm border border-library-tan/40"
                   />
                 ) : (
-                  <div className="h-64 w-48 bg-library-cream flex items-center justify-center rounded-md border border-library-tan/40">
+                  <div className="h-64 w-48 bg-library-cream/50 flex items-center justify-center rounded-md border border-library-tan/40">
                     <Book className="h-16 w-16 text-library-wood" />
                   </div>
                 )}
