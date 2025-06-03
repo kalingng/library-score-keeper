@@ -68,6 +68,12 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
     if (originalScores && onScoresUpdate) {
       onScoresUpdate(book.id, originalScores);
       setCurrentScores({...originalScores});
+      // Reset the book's additional criteria to their original values
+      if (book) {
+        book.hasPrize = false;
+        book.hasJEDI = false;
+        book.notInOtherLibraries = false;
+      }
       calculateTotalScore(originalScores);
       toast({
         title: "Scores reset",
@@ -182,7 +188,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-1 vintage-card">
+        <Card className="md:col-span-1 bg-white shadow-md">
           <CardHeader className="pb-2">
             <div className="flex justify-between items-center">
               <div>
@@ -369,7 +375,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 md:col-span-2 vintage-card">
+        <Card className="col-span-1 md:col-span-2 bg-white shadow-md">
           <CardHeader className="pb-2">
             <CardTitle className="text-library-brown">Book Details</CardTitle>
           </CardHeader>
