@@ -34,7 +34,14 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
   const calculateTotalScore = (scores: BookType['scores']) => {
     const { price, publishYear, averageRating, goodreadsReviews } = scores;
-    const total = (price + publishYear + averageRating + goodreadsReviews) / 4;
+    // Add bonus points for additional criteria
+    const bonusPoints = [
+      book.hasPrize ? 2 : 0,
+      book.hasJEDI ? 2 : 0,
+      book.notInOtherLibraries ? 2 : 0
+    ].reduce((sum, points) => sum + points, 0);
+    
+    const total = (price + publishYear + averageRating + goodreadsReviews + bonusPoints) / 4;
     setTotalScore(Number(total.toFixed(1)));
   };
 
@@ -78,6 +85,24 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
           "The book has been removed from your favourites" : 
           "The book has been added to your favourites"
       });
+    }
+  };
+
+  const handleToggleCriteria = (criteria: 'hasPrize' | 'hasJEDI' | 'notInOtherLibraries') => {
+    if (book) {
+      const updatedBook = {
+        ...book,
+        [criteria]: !book[criteria]
+      };
+      
+      if (onScoresUpdate) {
+        onScoresUpdate(book.id, book.scores);
+        calculateTotalScore(book.scores);
+        toast({
+          title: "Criteria updated",
+          description: `${criteria === 'hasPrize' ? 'Prize' : criteria === 'hasJEDI' ? 'JEDI' : 'Library availability'} status has been updated`
+        });
+      }
     }
   };
 
@@ -302,9 +327,14 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-library-brown">Got any prize?</span>
-                  <Badge variant={book.hasPrize ? "default" : "outline"} className={book.hasPrize ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}>
+                  <Button
+                    variant={book.hasPrize ? "default" : "outline"}
+                    size="sm"
+                    className={book.hasPrize ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}
+                    onClick={() => handleToggleCriteria('hasPrize')}
+                  >
                     {book.hasPrize ? "Yes" : "No"}
-                  </Badge>
+                  </Button>
                 </div>
                 
                 {book.hasPrize && book.prizeDetails && (
@@ -315,16 +345,26 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
                 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-library-brown">Include JEDI?</span>
-                  <Badge variant={book.hasJEDI ? "default" : "outline"} className={book.hasJEDI ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}>
+                  <Button
+                    variant={book.hasJEDI ? "default" : "outline"}
+                    size="sm"
+                    className={book.hasJEDI ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}
+                    onClick={() => handleToggleCriteria('hasJEDI')}
+                  >
                     {book.hasJEDI ? "Yes" : "No"}
-                  </Badge>
+                  </Button>
                 </div>
                 
                 <div className="flex justify-between items-center">
                   <span className="text-xs text-library-brown">Not in other libraries?</span>
-                  <Badge variant={book.notInOtherLibraries ? "default" : "outline"} className={book.notInOtherLibraries ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}>
+                  <Button
+                    variant={book.notInOtherLibraries ? "default" : "outline"}
+                    size="sm"
+                    className={book.notInOtherLibraries ? "bg-library-wood text-white" : "border-library-wood text-library-brown"}
+                    onClick={() => handleToggleCriteria('notInOtherLibraries')}
+                  >
                     {book.notInOtherLibraries ? "Yes" : "No"}
-                  </Badge>
+                  </Button>
                 </div>
               </div>
             </div>
