@@ -34,11 +34,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
   const calculateTotalScore = (scores: BookType['scores']) => {
     const { price, publishYear, averageRating, goodreadsReviews } = scores;
-    // Add bonus points for additional criteria
+    // Add bonus points for additional criteria (1 point for each "Yes")
     const bonusPoints = [
-      book.hasPrize ? 2 : 0,
-      book.hasJEDI ? 2 : 0,
-      book.notInOtherLibraries ? 2 : 0
+      book.hasPrize ? 1 : 0,
+      book.hasJEDI ? 1 : 0,
+      book.notInOtherLibraries ? 1 : 0
     ].reduce((sum, points) => sum + points, 0);
     
     const total = (price + publishYear + averageRating + goodreadsReviews + bonusPoints) / 4;
@@ -100,7 +100,7 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
         calculateTotalScore(book.scores);
         toast({
           title: "Criteria updated",
-          description: `${criteria === 'hasPrize' ? 'Prize' : criteria === 'hasJEDI' ? 'JEDI' : 'Library availability'} status has been updated`
+          description: `${criteria === 'hasPrize' ? 'Prize' : criteria === 'hasJEDI' ? 'JEDI' : 'Library availability'} status has been updated to ${!book[criteria] ? 'Yes' : 'No'}`
         });
       }
     }
