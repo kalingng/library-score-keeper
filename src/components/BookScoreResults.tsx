@@ -22,12 +22,22 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   const isMobile = useIsMobile();
   const [currentScores, setCurrentScores] = useState<BookType['scores'] | null>(null);
   const [originalScores, setOriginalScores] = useState<BookType['scores'] | null>(null);
+  const [originalCriteria, setOriginalCriteria] = useState<{
+    hasPrize: boolean;
+    hasJEDI: boolean;
+    notInOtherLibraries: boolean;
+  } | null>(null);
   const [totalScore, setTotalScore] = useState<number>(0);
 
   useEffect(() => {
     if (book) {
       setOriginalScores({...book.scores});
       setCurrentScores({...book.scores});
+      setOriginalCriteria({
+        hasPrize: book.hasPrize,
+        hasJEDI: book.hasJEDI,
+        notInOtherLibraries: book.notInOtherLibraries
+      });
       calculateTotalScore(book.scores);
     }
   }, [book?.id]);
@@ -75,15 +85,16 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
   };
 
   const handleResetScores = () => {
-    if (originalScores && onScoresUpdate) {
+    if (originalScores && originalCriteria && onScoresUpdate && book) {
+      // Reset scores
       onScoresUpdate(book.id, originalScores);
       setCurrentScores({...originalScores});
+      
       // Reset the book's additional criteria to their original values
-      if (book) {
-        book.hasPrize = false;
-        book.hasJEDI = false;
-        book.notInOtherLibraries = false;
-      }
+      book.hasPrize = originalCriteria.hasPrize;
+      book.hasJEDI = originalCriteria.hasJEDI;
+      book.notInOtherLibraries = originalCriteria.notInOtherLibraries;
+      
       calculateTotalScore(originalScores);
       toast({
         title: "Scores reset",
