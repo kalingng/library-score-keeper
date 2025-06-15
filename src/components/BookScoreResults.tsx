@@ -34,11 +34,11 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
   const calculateTotalScore = (scores: BookType['scores']) => {
     const { price, publishYear, averageRating, goodreadsReviews } = scores;
-    // Add bonus points for additional criteria (1 point for each "Yes")
+    // Add bonus points for additional criteria (0.2 points for each "Yes")
     const bonusPoints = [
-      book.hasPrize ? 1 : 0,
-      book.hasJEDI ? 1 : 0,
-      book.notInOtherLibraries ? 1 : 0
+      book.hasPrize ? 0.2 : 0,
+      book.hasJEDI ? 0.2 : 0,
+      book.notInOtherLibraries ? 0.2 : 0
     ].reduce((sum, points) => sum + points, 0);
     
     const total = (price + publishYear + averageRating + goodreadsReviews + bonusPoints) / 4;
