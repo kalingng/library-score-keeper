@@ -79,19 +79,19 @@ const BookScoreResults = ({ book, onScoresUpdate, onToggleFavourite, isFavourite
 
   const handleResetScores = () => {
     if (originalScores && originalCriteria && onScoresUpdate && book) {
-      // Reset scores
-      onScoresUpdate(book.id, originalScores);
-      setCurrentScores({...originalScores});
-      
-      // Reset the book's additional criteria to their original values
+      // Reset the book's additional criteria to their original values FIRST
       book.hasPrize = originalCriteria.hasPrize;
       book.hasJEDI = originalCriteria.hasJEDI;
       book.notInOtherLibraries = originalCriteria.notInOtherLibraries;
       
+      // Then reset scores and recalculate total
+      onScoresUpdate(book.id, originalScores);
+      setCurrentScores({...originalScores});
       calculateTotalScore(originalScores);
+      
       toast({
         title: "Scores reset",
-        description: "The book's scores have been reset to original values"
+        description: "The book's scores and criteria have been reset to original values"
       });
     }
   };
